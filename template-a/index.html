@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pathil Vehicle — Find cars in Kathmandu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #1a8f4a;
+      --green-hover: #147a3d;
+      --green-soft: #e8f6ee;
+      --ink: #0d1f16;
+      --muted: #5a6b62;
+      --line: #e2e8e4;
+      --bg: #f5f7f6;
+      --navy: #1a2b3c;
+      --radius: 12px;
+      --shadow: 0 8px 28px rgba(13, 31, 22, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Outfit, sans-serif; color: var(--ink); background: var(--bg); }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 28px;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo {
+      font-family: Syne, sans-serif; font-weight: 800; font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .logo em { font-style: normal; color: var(--green); }
+    .nav-links { display: flex; gap: 22px; font-weight: 500; font-size: .92rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .currency {
+      border: 1px solid var(--line); background: #fff; border-radius: 8px;
+      padding: 7px 10px; color: var(--ink); cursor: pointer;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: none; border-radius: 10px; padding: 11px 18px; font-weight: 600;
+      cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { background: var(--green-hover); }
+    .btn-outline { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); }
+
+    /* HERO */
+    .hero {
+      position: relative; min-height: 58vh;
+      display: flex; align-items: flex-end;
+      background:
+        linear-gradient(180deg, rgba(8,18,14,.25) 0%, rgba(8,18,14,.72) 100%),
+        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80') center/cover no-repeat;
+      color: #fff; padding: 0 28px 40px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30h60M30 0v60' stroke='%23ffffff08' stroke-width='1'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; width: 100%; max-width: 1180px; margin: 0 auto; }
+    .hero h1 {
+      font-family: Syne, sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 800; letter-spacing: -0.03em; max-width: 14ch; line-height: 1.05;
+      margin-bottom: 10px;
+    }
+    .hero p { max-width: 420px; opacity: .9; margin-bottom: 22px; font-size: 1.05rem; }
+    .search-bar {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr auto;
+      gap: 0; background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25); color: var(--ink);
+    }
+    .search-field {
+      padding: 14px 18px; border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .search-field label { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+    .search-field input, .search-field select {
+      border: none; outline: none; background: transparent; font-weight: 600; width: 100%;
+    }
+    .search-bar .btn { border-radius: 0; padding: 0 28px; font-size: 1rem; }
+
+    /* SERVICE CHOOSER — after hero, not in nav */
+    .service-section {
+      max-width: 1180px; margin: -28px auto 0; padding: 0 28px; position: relative; z-index: 5;
+    }
+    .service-panel {
+      background: #fff; border-radius: 16px; padding: 22px 26px 26px;
+      box-shadow: var(--shadow); border: 1px solid var(--line);
+    }
+    .service-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;
+    }
+    .service-head h2 { font-size: 1.15rem; font-weight: 700; color: var(--navy); }
+    .service-close {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: #e8ecef; color: #fff; font-size: 1rem; cursor: pointer;
+      display: grid; place-items: center; line-height: 1;
+    }
+    .service-close:hover { background: #cfd6db; }
+    .service-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .service-card {
+      position: relative; border: 2px solid transparent; border-radius: 14px;
+      padding: 18px 12px 14px; text-align: center; cursor: pointer;
+      background: #fafbfc; transition: border-color .2s, background .2s;
+    }
+    .service-card:hover { background: #f3faf6; }
+    .service-card.active {
+      border-color: var(--green); background: #fff;
+    }
+    .service-card .check {
+      position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+      border-radius: 50%; background: var(--green); color: #fff;
+      display: none; align-items: center; justify-content: center; font-size: .7rem;
+    }
+    .service-card.active .check { display: flex; }
+    .service-icon { height: 72px; margin: 0 auto 10px; display: grid; place-items: center; }
+    .service-card span { display: block; font-weight: 700; color: var(--navy); font-size: .95rem; }
+
+    .trust {
+      max-width: 1180px; margin: 22px auto 0; padding: 0 28px;
+      display: flex; gap: 28px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; font-weight: 500;
+    }
+    .trust li { list-style: none; display: flex; align-items: center; gap: 8px; }
+    .trust svg { color: var(--green); }
+
+    /* MAIN LAYOUT */
+    .main {
+      max-width: 1180px; margin: 28px auto 60px; padding: 0 28px;
+      display: grid; grid-template-columns: 260px 1fr; gap: 22px;
+    }
+    .filters {
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 18px; height: fit-content; position: sticky; top: 76px;
+    }
+    .filters h3 {
+      font-size: .78rem; text-transform: uppercase; letter-spacing: .05em;
+      color: var(--muted); margin: 16px 0 10px; font-weight: 700;
+    }
+    .filters h3:first-child { margin-top: 0; }
+    .check-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+      font-size: .92rem; cursor: pointer;
+    }
+    .check-row input { accent-color: var(--green); width: 16px; height: 16px; }
+    .price-range { width: 100%; accent-color: var(--green); margin: 8px 0; }
+    .price-labels { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); }
+    .seat-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .seat-pill {
+      border: 1px solid var(--line); background: #fff; border-radius: 8px;
+      padding: 7px 12px; font-size: .85rem; font-weight: 600; cursor: pointer;
+    }
+    .seat-pill.active { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+
+    .results-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .results-head h2 { font-size: 1.05rem; }
+    .results-head h2 strong { color: var(--green); }
+    .view-toggle { display: flex; background: #fff; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .view-toggle button {
+      border: none; background: transparent; padding: 8px 14px; cursor: pointer;
+      font-weight: 600; font-size: .85rem; color: var(--muted);
+    }
+    .view-toggle button.active { background: var(--green); color: #fff; }
+
+    .results-list { display: flex; flex-direction: column; gap: 14px; }
+    .car-card {
+      display: grid; grid-template-columns: 220px 1fr auto; gap: 18px;
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.03);
+      transition: border-color .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .car-card:hover { border-color: #b8dcc6; box-shadow: var(--shadow); }
+    .car-img {
+      border-radius: 10px; overflow: hidden; background: #eef2f0;
+      aspect-ratio: 16/10; position: relative;
+    }
+    .car-img img { width: 100%; height: 100%; object-fit: cover; }
+    .fav {
+      position: absolute; top: 8px; right: 8px; width: 34px; height: 34px;
+      border-radius: 50%; border: none; background: rgba(255,255,255,.95);
+      cursor: pointer; font-size: 1rem; color: #999;
+    }
+    .fav.on { color: #e11d48; }
+    .car-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .car-meta { color: var(--muted); font-size: .88rem; margin-bottom: 10px; }
+    .spec-row { display: flex; flex-wrap: wrap; gap: 12px; font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+    .spec-row span { display: inline-flex; align-items: center; gap: 5px; }
+    .loc { font-size: .82rem; color: var(--muted); }
+    .car-price { text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; min-width: 140px; }
+    .rating { font-size: .85rem; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+    .rating .stars { color: #f5a623; }
+    .day-price { font-size: 1.25rem; font-weight: 800; }
+    .day-price small { font-size: .75rem; font-weight: 500; color: var(--muted); }
+    .total { font-size: .8rem; color: var(--muted); margin: 4px 0 12px; }
+
+    /* MAP SPLIT */
+    .layout-map .results-list { display: none; }
+    .layout-map .map-split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; min-height: 560px; }
+    .layout-list .map-split, .layout-grid .map-split { display: none; }
+    .map-pane {
+      background: #dce8e2; border-radius: var(--radius); border: 1px solid var(--line);
+      position: relative; overflow: hidden;
+      background-image:
+        linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.4)),
+        url('https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1000&q=60');
+      background-size: cover; background-position: center;
+    }
+    .map-check {
+      position: absolute; top: 12px; left: 12px; background: #fff;
+      padding: 8px 12px; border-radius: 8px; font-size: .8rem; font-weight: 600;
+      box-shadow: var(--shadow); display: flex; align-items: center; gap: 6px; z-index: 2;
+    }
+    .pin {
+      position: absolute; transform: translate(-50%, -100%);
+      background: #fff; border: 2px solid var(--green); border-radius: 999px;
+      padding: 6px 10px; font-size: .78rem; font-weight: 700; white-space: nowrap;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); transition: transform .15s;
+    }
+    .pin:hover, .pin.active { background: var(--green); color: #fff; transform: translate(-50%, -100%) scale(1.05); }
+    .map-list { display: flex; flex-direction: column; gap: 10px; overflow: auto; max-height: 560px; }
+    .compact-card {
+      display: grid; grid-template-columns: 100px 1fr; gap: 10px;
+      background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px;
+      cursor: pointer;
+    }
+    .compact-card.active { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-soft); }
+    .compact-card img { width: 100%; height: 70px; object-fit: cover; border-radius: 8px; }
+    .compact-card h4 { font-size: .95rem; margin-bottom: 2px; }
+    .compact-card .meta { font-size: .78rem; color: var(--muted); }
+    .compact-card .price { font-weight: 800; margin-top: 6px; color: var(--green); }
+
+    /* GRID */
+    .layout-grid .results-list {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+    .layout-grid .car-card {
+      grid-template-columns: 1fr; padding: 0; overflow: hidden;
+    }
+    .layout-grid .car-img { border-radius: 12px 12px 0 0; aspect-ratio: 16/11; }
+    .layout-grid .car-info, .layout-grid .car-price { padding: 12px 14px; text-align: left; align-items: flex-start; }
+    .layout-grid .car-price { flex-direction: row; justify-content: space-between; align-items: center; padding-top: 0; padding-bottom: 14px; }
+
+    .empty {
+      background: #fff; border: 1px dashed var(--line); border-radius: var(--radius);
+      padding: 48px; text-align: center; color: var(--muted);
+    }
+
+    footer.app-foot {
+      border-top: 1px solid var(--line); background: #fff;
+      padding: 28px; text-align: center; color: var(--muted); font-size: .85rem;
+    }
+    .back-hub { font-size: .85rem; color: var(--muted); }
+    .back-hub:hover { color: var(--green); }
+
+    @media (max-width: 960px) {
+      .main { grid-template-columns: 1fr; }
+      .filters { position: static; }
+      .search-bar { grid-template-columns: 1fr 1fr; }
+      .search-bar .btn { grid-column: 1 / -1; padding: 14px; }
+      .service-grid { grid-template-columns: 1fr; }
+      .layout-map .map-split { grid-template-columns: 1fr; }
+      .layout-grid .results-list { grid-template-columns: 1fr 1fr; }
+      .car-card { grid-template-columns: 160px 1fr; }
+      .car-price { grid-column: 1 / -1; flex-direction: row; align-items: center; text-align: left; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .layout-grid .results-list { grid-template-columns: 1fr; }
+      .car-card { grid-template-columns: 1fr; }
+      .hero { min-height: 48vh; padding-bottom: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="logo" href="index.html">Pathil <em>Vehicle</em></a>
+    <div class="nav-links">
+      <a href="listing.html">Browse cars</a>
+      <a href="listing.html?view=map">Map listing</a>
+      <a href="detail.html">Detail</a>
+      <a href="../index.html" class="back-hub">All templates</a>
+    </div>
+    <div class="nav-actions">
+      <select class="currency" aria-label="Currency">
+        <option>NPR</option><option>USD</option><option>EUR</option><option>INR</option>
+      </select>
+      <button class="btn btn-outline" type="button">Sign in</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Pathil Vehicle</h1>
+      <p>Drive Kathmandu your way — airport runs, mountain weekends, and city days with transparent NPR pricing.</p>
+      <form class="search-bar" id="searchForm" action="listing.html" method="get">
+        <div class="search-field">
+          <label>Location</label>
+          <input type="text" name="loc" id="loc" value="Kathmandu, Nepal" />
+        </div>
+        <div class="search-field">
+          <label>Pick-up</label>
+          <input type="datetime-local" name="pickup" id="pickup" />
+        </div>
+        <div class="search-field">
+          <label>Drop-off</label>
+          <input type="datetime-local" name="dropoff" id="dropoff" />
+        </div>
+        <input type="hidden" name="service" id="serviceInput" value="rent" />
+        <input type="hidden" name="view" value="map" />
+        <button class="btn btn-green" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Choose a service AFTER hero (not in nav) -->
+  <section class="service-section" id="services">
+    <div class="service-panel" id="servicePanel">
+      <div class="service-head">
+        <h2>Choose a service</h2>
+        <button type="button" class="service-close" id="serviceClose" title="Dismiss" aria-label="Close">✕</button>
+      </div>
+      <div class="service-grid" role="radiogroup" aria-label="Service type">
+        <button type="button" class="service-card active" data-service="rent" role="radio" aria-checked="true">
+          <span class="check">✓</span>
+          <div class="service-icon" aria-hidden="true">
+            <svg width="88" height="64" viewBox="0 0 88 64" fill="none"><rect x="8" y="28" width="72" height="22" rx="8" fill="#1a8f4a"/><path d="M18 28l8-14h36l8 14" fill="#2db35e"/><circle cx="26" cy="50" r="7" fill="#1a2b3c"/><circle cx="62" cy="50" r="7" fill="#1a2b3c"/><circle cx="26" cy="50" r="3" fill="#fff"/><circle cx="62" cy="50" r="3" fill="#fff"/><rect x="22" y="32" width="12" height="8" rx="2" fill="#c8f0d8"/><rect x="54" y="32" width="12" height="8" rx="2" fill="#c8f0d8"/><circle cx="34" cy="24" r="3" fill="#0d1f16" opacity=".35"/><circle cx="48" cy="24" r="3" fill="#0d1f16" opacity=".35"/></svg>
+          </div>
+          <span>Rent a Car</span>
+        </button>
+        <button type="button" class="service-card" data-service="driver" role="radio" aria-checked="false">
+          <span class="check">✓</span>
+          <div class="service-icon" aria-hidden="true">
+            <svg width="88" height="64" viewBox="0 0 88 64" fill="none"><circle cx="64" cy="18" r="10" fill="#e8f6ee"/><path d="M64 10v8l5 3" stroke="#1a8f4a" stroke-width="2" stroke-linecap="round"/><rect x="6" y="30" width="58" height="18" rx="7" fill="#1a8f4a"/><path d="M14 30l6-11h28l6 11" fill="#2db35e"/><circle cx="22" cy="48" r="6" fill="#1a2b3c"/><circle cx="50" cy="48" r="6" fill="#1a2b3c"/><circle cx="72" cy="40" r="7" fill="#1a8f4a"/><rect x="69" y="47" width="6" height="10" rx="2" fill="#147a3d"/></svg>
+          </div>
+          <span>Hire a Driver</span>
+        </button>
+        <button type="button" class="service-card" data-service="self" role="radio" aria-checked="false">
+          <span class="check">✓</span>
+          <div class="service-icon" aria-hidden="true">
+            <svg width="88" height="64" viewBox="0 0 88 64" fill="none"><path d="M22 42h44l-4-16H26l-4 16z" fill="#1a8f4a"/><path d="M28 26h32l4 10H24l4-10z" fill="#2db35e"/><rect x="32" y="28" width="10" height="7" rx="1" fill="#c8f0d8"/><rect x="46" y="28" width="10" height="7" rx="1" fill="#c8f0d8"/><circle cx="30" cy="44" r="6" fill="#1a2b3c"/><circle cx="58" cy="44" r="6" fill="#1a2b3c"/><rect x="40" y="38" width="8" height="3" rx="1" fill="#0d1f16" opacity=".3"/></svg>
+          </div>
+          <span>Self-Drive</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <ul class="trust">
+    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg> Free cancellation</li>
+    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> No hidden fees</li>
+    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> 24/7 support</li>
+  </ul>
+
+  <div class="main" id="results" style="grid-template-columns:1fr">
+    <section>
+      <div class="results-head">
+        <h2>Popular cars in Kathmandu</h2>
+        <a class="btn btn-green" href="listing.html?view=map">Open full listing</a>
+      </div>
+      <div class="results-list" id="carList" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px"></div>
+      <p style="text-align:center;margin-top:22px;color:var(--muted)">
+        Full Kayak-style filters + map live on the
+        <a href="listing.html" style="color:var(--green);font-weight:700">listing page</a>.
+      </p>
+    </section>
+  </div>
+
+  <footer class="app-foot">
+    Pathil Vehicle · Template A · Front page · <a href="listing.html" style="color:var(--green)">Listing</a> · Subidhanagar-32, Tinkune, Kathmandu
+  </footer>
+
+  <script>
+    const PREVIEW = [
+      { id: 1, name: "Hyundai i20", type: "Hatchback", trans: "Automatic", fuel: "Petrol", seats: 5, bags: 2, rating: 4.6, price: 2250, loc: "Thamel", img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=80" },
+      { id: 2, name: "Toyota Corolla", type: "Sedan", trans: "Automatic", fuel: "Petrol", seats: 5, bags: 3, rating: 4.8, price: 3200, loc: "Airport Rd", img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80" },
+      { id: 4, name: "Toyota RAV4", type: "SUV", trans: "Automatic", fuel: "Petrol", seats: 5, bags: 4, rating: 4.9, price: 5500, loc: "Bouddha", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80" },
+    ];
+    let service = "rent";
+    const fmt = n => "NPR " + n.toLocaleString("en-NP");
+
+    function renderPreview() {
+      document.getElementById("carList").innerHTML = PREVIEW.map(c => `
+        <article class="car-card" style="grid-template-columns:1fr;padding:0;overflow:hidden;cursor:pointer" data-id="${c.id}">
+          <div class="car-img"><img src="${c.img}" alt="${c.name}" /></div>
+          <div class="car-info" style="padding:12px 14px">
+            <h3>${c.name}</h3>
+            <div class="car-meta">${c.type} · ★ ${c.rating}</div>
+            <div class="day-price" style="margin-top:8px">${fmt(c.price)} <small>/ day</small></div>
+          </div>
+          <div style="padding:0 14px 14px">
+            <a class="btn btn-green" href="listing.html?service=${service}&view=map" onclick="event.stopPropagation()">See on listing</a>
+          </div>
+        </article>`).join("");
+      document.querySelectorAll("#carList .car-card").forEach(el => {
+        el.addEventListener("click", () => {
+          location.href = `detail.html?id=${el.dataset.id}&service=${service}`;
+        });
+      });
+    }
+
+    document.querySelectorAll(".service-card").forEach(card => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".service-card").forEach(c => {
+          c.classList.remove("active");
+          c.setAttribute("aria-checked", "false");
+        });
+        card.classList.add("active");
+        card.setAttribute("aria-checked", "true");
+        service = card.dataset.service;
+        document.getElementById("serviceInput").value = service;
+        renderPreview();
+      });
+    });
+    document.getElementById("serviceClose").addEventListener("click", () => {
+      document.getElementById("servicePanel").style.display = "none";
+    });
+
+    (function initDates() {
+      const p = document.getElementById("pickup");
+      const d = document.getElementById("dropoff");
+      const start = new Date(); start.setDate(start.getDate() + 1); start.setMinutes(0);
+      const end = new Date(start); end.setDate(end.getDate() + 3);
+      const toLocal = dt => {
+        const pad = n => String(n).padStart(2, "0");
+        return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+      };
+      p.value = toLocal(start);
+      d.value = toLocal(end);
+    })();
+
+    renderPreview();
+  </script>
+</body>
+</html>

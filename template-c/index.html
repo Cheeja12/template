@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pathil Vehicles — Move freely through Nepal</title>
+  <meta name="description" content="Book a vehicle, hire a driver, or discover your next self-drive adventure with Pathil Vehicles." />
+  <style>
+    :root {
+      --blue-950: #06254b;
+      --blue-900: #073467;
+      --blue-800: #0b4a86;
+      --blue-700: #1063a5;
+      --blue-500: #1f91d0;
+      --blue-100: #eaf6ff;
+      --yellow: #ffc928;
+      --yellow-light: #fff3bb;
+      --ink: #0d2947;
+      --muted: #62758a;
+      --line: #dce6ef;
+      --canvas: #f5f8fb;
+      --green: #16a56b;
+      --orange: #ef7025;
+      --white: #ffffff;
+      --shadow-sm: 0 8px 22px rgba(10, 53, 92, .08);
+      --shadow-lg: 0 24px 50px rgba(4, 37, 75, .16);
+      --radius: 18px;
+      --radius-sm: 11px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .hide { display: none !important; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    /* Shared primitives */
+    .eyebrow {
+      color: var(--blue-700);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .section-title {
+      max-width: 590px;
+      margin: 8px 0 0;
+      color: var(--blue-950);
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+    }
+    .section-copy { max-width: 560px; color: var(--muted); line-height: 1.7; }
+    .btn {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: var(--blue-950); background: var(--yellow); box-shadow: 0 7px 18px rgba(255, 201, 40, .3); }
+    .btn-primary:hover { background: #ffd94e; box-shadow: 0 10px 25px rgba(255, 201, 40, .4); }
+    .btn-blue { color: #fff; background: var(--blue-800); box-shadow: 0 9px 18px rgba(7, 52, 103, .18); }
+    .btn-blue:hover { background: var(--blue-900); }
+    .btn-ghost { color: var(--blue-800); border-color: var(--line); background: #fff; }
+    .btn-white { color: var(--blue-900); background: #fff; }
+    .icon { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Navigation */
+    .site-nav {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      right: 0;
+      left: 0;
+      color: #fff;
+    }
+    .nav-inner { display: flex; height: 78px; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 9px; color: #fff; font-size: 22px; font-weight: 900; letter-spacing: -.06em; }
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 10px 10px 10px 3px;
+      color: var(--blue-950);
+      background: var(--yellow);
+      font-size: 19px;
+      font-weight: 950;
+      transform: rotate(-6deg);
+    }
+    .brand small { display: block; margin-top: 2px; color: rgba(255,255,255,.65); font-size: 8px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 31px; margin-left: auto; margin-right: 28px; font-size: 12px; font-weight: 700; }
+    .nav-links a { color: rgba(255,255,255,.85); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--yellow); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .nav-login { padding: 9px 13px; border: 1px solid rgba(255,255,255,.28); border-radius: 8px; font-size: 12px; font-weight: 800; }
+    .nav-mobile { display: none; padding: 7px; border: 1px solid rgba(255,255,255,.3); border-radius: 8px; color: #fff; background: transparent; }
+
+    /* Home */
+    .hero { 
+      position: relative;
+      min-height: 780px;
+      overflow: hidden;
+      color: #fff;
+      background:
+        radial-gradient(circle at 83% 15%, rgba(42, 145, 196, .48), transparent 25%),
+        linear-gradient(120deg, #062650 0%, #0a4d82 48%, #0b7095 100%);
+    }
+    .hero::before {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(105deg, rgba(3, 27, 56, .86) 0%, rgba(4, 53, 94, .43) 49%, rgba(11, 112, 149, .16) 100%),
+        repeating-linear-gradient(158deg, transparent 0 96px, rgba(255,255,255,.05) 97px 98px);
+      content: "";
+      pointer-events: none;
+    }
+    .hero::after {
+      position: absolute;
+      right: -7%;
+      bottom: -190px;
+      left: -8%;
+      height: 330px;
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+      background: rgba(4, 28, 58, .34);
+      content: "";
+      transform: rotate(-4deg);
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero-content { padding-top: 146px; padding-bottom: 235px; }
+    .hero-title { max-width: 610px; margin: 0; font-size: clamp(42px, 6.4vw, 78px); line-height: .99; letter-spacing: -.07em; }
+    .hero-title em { color: var(--yellow); font-style: normal; }
+    .hero-copy { max-width: 480px; margin: 21px 0 0; color: rgba(255,255,255,.79); font-size: 15px; line-height: 1.7; }
+    .trust-row { display: flex; align-items: center; gap: 16px; margin-top: 27px; color: rgba(255,255,255,.75); font-size: 11px; font-weight: 700; }
+    .avatar-stack { display: flex; }
+    .avatar { display: grid; width: 28px; height: 28px; margin-right: -7px; place-items: center; border: 2px solid var(--blue-900); border-radius: 50%; color: #fff; background: #db8e64; font-size: 10px; }
+    .avatar:nth-child(2) { background: #5aa5b1; }
+    .avatar:nth-child(3) { background: #a77fbc; }
+    .avatar:nth-child(4) { background: var(--yellow); color: var(--blue-950); }
+
+    /* Animated vehicle */
+    .hero-road { position: absolute; z-index: 0; right: 0; bottom: 47px; left: 0; height: 105px; transform: rotate(-2deg); background: rgba(2, 20, 43, .26); }
+    .hero-road::before { position: absolute; top: 49px; right: 0; left: 0; height: 2px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0 64px, transparent 64px 123px); content: ""; }
+    .road-glow { position: absolute; right: 0; bottom: 0; left: 0; height: 55px; background: linear-gradient(0deg, rgba(4, 32, 59, .42), transparent); }
+    .hero-photo {
+      position: absolute;
+      z-index: 3;
+      right: 13%;
+      top: 116px;
+      width: min(475px, 45vw);
+      aspect-ratio: 1.6;
+      height: auto;
+      object-fit: cover;
+      object-position: center;
+      border: 5px solid rgba(255,255,255,.3);
+      border-radius: 25px 7px 25px 7px;
+      filter: saturate(1.08) contrast(1.04) drop-shadow(20px 23px 18px rgba(2, 24, 43, .3));
+      animation: carFloat 4.5s ease-in-out infinite;
+      transition: filter .25s ease;
+    }
+    .hero-vehicle:hover {
+      animation-play-state: paused;
+      filter: drop-shadow(25px 28px 20px rgba(2, 24, 43, .36));
+      transform: translate(14px, -8px) scale(1.04) rotate(1deg);
+    }
+    .car-shadow { position: absolute; right: 10%; bottom: 67px; z-index: 2; width: 395px; height: 22px; border-radius: 50%; background: rgba(2,25,46,.4); filter: blur(7px); }
+    @keyframes carFloat { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
+    .spark { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--yellow); animation: sparkle 2.5s ease-in-out infinite; }
+    .spark.one { top: 160px; right: 8%; }
+    .spark.two { top: 240px; right: 39%; width: 3px; height: 3px; animation-delay: .8s; }
+    .spark.three { top: 115px; right: 27%; width: 5px; height: 5px; animation-delay: 1.2s; }
+    @keyframes sparkle { 0%, 100% { opacity: .2; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.5); } }
+    .hero-form {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1.1fr 1.1fr 1fr 1fr auto;
+      gap: 9px;
+      margin-top: 41px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 15px;
+      background: rgba(255,255,255,.98);
+      box-shadow: var(--shadow-lg);
+    }
+    .form-field { min-width: 0; padding: 9px 11px 8px; border-right: 1px solid var(--line); }
+    .form-field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; }
+    .form-field input, .form-field select { width: 100%; padding: 0; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 13px; font-weight: 750; }
+    .form-field input::placeholder { color: #93a0ad; font-weight: 600; }
+    .form-field.hidden-field { display: none; }
+    .service-strip { display: flex; gap: 8px; margin-top: 30px; }
+    .service-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.23); border-radius: 999px; color: rgba(255,255,255,.8); background: rgba(255,255,255,.08); font-size: 11px; font-weight: 800; }
+    .service-pill.active { border-color: var(--yellow); color: var(--blue-950); background: var(--yellow); }
+
+    /* Feature section */
+    .features { padding: 86px 0 92px; background: #fff; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 31px; }
+    .section-head .section-copy { margin: 0; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .feature-card { position: relative; min-height: 216px; padding: 25px; overflow: hidden; border: 1px solid #e7eef4; border-radius: var(--radius); background: #fff; box-shadow: 0 5px 14px rgba(5,43,77,.03); transition: transform .25s, box-shadow .25s; }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-sm); }
+    .feature-card.highlight { color: #fff; background: var(--blue-800); }
+    .feature-card.highlight .feature-copy { color: rgba(255,255,255,.72); }
+    .feature-icon { display: grid; width: 46px; height: 46px; place-items: center; margin-bottom: 22px; border-radius: 13px; color: var(--blue-800); background: var(--blue-100); }
+    .feature-card.highlight .feature-icon { color: var(--blue-950); background: var(--yellow); }
+    .feature-title { margin: 0; font-size: 18px; letter-spacing: -.025em; }
+    .feature-copy { max-width: 260px; margin: 10px 0 0; color: var(--muted); font-size: 13px; line-height: 1.62; }
+    .feature-number { position: absolute; right: 22px; bottom: 13px; color: rgba(7,52,103,.06); font-size: 90px; font-weight: 950; letter-spacing: -.1em; }
+
+    /* Content sections */
+    .popular { padding: 92px 0; background: var(--canvas); }
+    .vehicle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .vehicle-card { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 5px 16px rgba(7,52,103,.05); }
+    .vehicle-visual { position: relative; display: grid; min-height: 155px; place-items: center; overflow: hidden; background: linear-gradient(135deg, #eef7ff, #e4f0f6); }
+    .vehicle-visual::before { position: absolute; right: -23px; bottom: -63px; width: 180px; height: 180px; border: 34px solid rgba(31,145,208,.09); border-radius: 50%; content: ""; }
+    .vehicle-photo { position: relative; width: 100%; height: 155px; object-fit: cover; object-position: center; transition: transform .3s, filter .3s; }
+    .vehicle-card:hover .vehicle-photo { transform: scale(1.055); filter: saturate(1.08); }
+    .vehicle-label { position: absolute; top: 13px; left: 13px; padding: 5px 9px; border-radius: 999px; color: var(--blue-800); background: rgba(255,255,255,.82); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .vehicle-body { padding: 18px; }
+    .vehicle-name-row { display: flex; align-items: start; justify-content: space-between; }
+    .vehicle-name { margin: 0; color: var(--blue-950); font-size: 19px; letter-spacing: -.03em; }
+    .vehicle-sub { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .price { color: var(--blue-800); font-size: 18px; font-weight: 900; }
+    .price small { display: block; color: var(--muted); font-size: 10px; font-weight: 600; text-align: right; }
+    .specs { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+    .spec { display: inline-flex; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 6px; color: var(--muted); background: #f3f7fa; font-size: 10px; font-weight: 700; }
+    .vehicle-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .rating { color: #ca8b00; font-size: 11px; font-weight: 800; }
+    .vehicle-footer a { color: var(--blue-700); font-size: 11px; font-weight: 800; }
+    .split-banner { display: grid; grid-template-columns: 1fr 1fr; min-height: 365px; margin-top: 92px; overflow: hidden; border-radius: 24px; background: var(--blue-900); }
+    .banner-art { position: relative; overflow: hidden; background: linear-gradient(140deg, #0d6799, #082c5c); }
+    .banner-art::before { position: absolute; top: -70px; right: -40px; width: 320px; height: 320px; border: 72px solid rgba(255,201,40,.15); border-radius: 50%; content: ""; }
+    .mountain { position: absolute; right: -10%; bottom: -1px; left: -10%; height: 150px; background: #061f43; clip-path: polygon(0 87%, 18% 43%, 29% 68%, 45% 14%, 57% 61%, 74% 31%, 100% 78%, 100% 100%, 0 100%); }
+    .banner-car { position: absolute; z-index: 2; right: 8%; bottom: 53px; width: 78%; height: 190px; object-fit: cover; object-position: center; border: 4px solid rgba(255,255,255,.3); border-radius: 18px 4px 18px 4px; box-shadow: 0 20px 30px rgba(0,0,0,.24); animation: carFloat 4.5s ease-in-out infinite reverse; }
+    .banner-content { display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 55px; color: #fff; }
+    .banner-content .section-title { color: #fff; }
+    .banner-content .section-copy { color: rgba(255,255,255,.7); }
+    .testimonials { padding: 91px 0; background: #fff; }
+    .quote-row { display: grid; grid-template-columns: 1.1fr .9fr; gap: 54px; align-items: center; }
+    .quote { margin: 22px 0; color: var(--blue-950); font-size: clamp(22px, 3vw, 33px); font-weight: 800; line-height: 1.25; letter-spacing: -.04em; }
+    .quote-by { display: flex; align-items: center; gap: 11px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .quote-mark { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; color: var(--blue-950); background: var(--yellow); font-weight: 900; }
+    .metric-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .metric { padding: 20px; border-radius: 14px; background: var(--canvas); }
+    .metric b { display: block; color: var(--blue-800); font-size: 28px; letter-spacing: -.05em; }
+    .metric span { color: var(--muted); font-size: 11px; font-weight: 700; }
+    footer { padding: 55px 0 26px; color: rgba(255,255,255,.68); background: var(--blue-950); }
+    .footer-top { display: flex; justify-content: space-between; gap: 40px; padding-bottom: 45px; }
+    footer .brand { color: #fff; }
+    .footer-intro { max-width: 270px; margin: 15px 0 0; font-size: 12px; line-height: 1.7; }
+    .footer-links { display: flex; gap: 70px; }
+    .footer-links h4 { margin: 4px 0 16px; color: #fff; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; }
+    .footer-links a { display: block; margin-bottom: 10px; font-size: 12px; }
+    .footer-bottom { display: flex; justify-content: space-between; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.13); font-size: 10px; }
+
+    /* Results */
+    .results-page { min-height: 100vh; color: var(--ink); background: var(--canvas); }
+    .results-nav { position: relative; color: var(--blue-950); background: #fff; box-shadow: 0 1px 0 var(--line); }
+    .results-nav .brand { color: var(--blue-950); }
+    .results-nav .brand small { color: var(--muted); }
+    .results-nav .nav-links a { color: var(--muted); }
+    .results-nav .nav-links a.active, .results-nav .nav-links a:hover { color: var(--blue-800); }
+    .results-nav .nav-login { border-color: var(--line); }
+    .results-nav .nav-mobile { border-color: var(--line); color: var(--blue-900); }
+    .results-search-wrap { padding: 18px 0; background: var(--blue-950); }
+    .results-search { display: grid; grid-template-columns: 1.15fr 1.15fr .9fr .9fr auto; gap: 8px; padding: 9px; border-radius: 12px; background: #fff; }
+    .result-input { display: flex; min-width: 0; align-items: center; gap: 8px; padding: 5px 12px; border-right: 1px solid var(--line); }
+    .result-input .icon { flex: 0 0 auto; color: var(--blue-700); }
+    .result-input label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+    .result-input input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); font-size: 12px; font-weight: 750; }
+    .results-main { display: grid; grid-template-columns: 246px minmax(0, 1fr) 36%; gap: 20px; width: min(1400px, calc(100% - 38px)); margin: 0 auto; padding: 23px 0 45px; }
+    .filter-panel { align-self: start; padding: 18px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+    .filter-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .filter-head b { font-size: 14px; }
+    .clear-btn { padding: 0; border: 0; color: var(--blue-700); background: transparent; font-size: 10px; font-weight: 800; }
+    .filter-group { padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .filter-group:last-child { padding-bottom: 4px; border-bottom: 0; }
+    .filter-title { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--blue-950); font-size: 11px; font-weight: 850; }
+    .filter-title span { color: var(--muted); font-size: 13px; }
+    .check { display: flex; align-items: center; gap: 9px; margin: 11px 0; color: var(--muted); font-size: 11px; }
+    .check input { accent-color: var(--blue-700); }
+    .check em { margin-left: auto; color: #a0adba; font-style: normal; }
+    .range { width: 100%; height: 4px; accent-color: var(--blue-700); }
+    .range-label { display: flex; justify-content: space-between; margin-top: 7px; color: var(--muted); font-size: 10px; }
+    .results-column { min-width: 0; }
+    .results-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 14px; }
+    .results-heading h1 { margin: 0; color: var(--blue-950); font-size: 23px; letter-spacing: -.04em; }
+    .results-heading p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .sort-box { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; font-weight: 700; }
+    .sort-box select { padding: 8px 9px; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: #fff; font-size: 10px; font-weight: 700; outline: 0; }
+    .view-toggle { display: flex; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: #fff; }
+    .view-toggle button { padding: 8px 10px; border: 0; color: var(--muted); background: transparent; font-size: 10px; font-weight: 800; cursor: pointer; }
+    .view-toggle button.active { color: #fff; background: var(--blue-800); }
+    .deal-alert { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 13px; border: 1px solid #bce8d5; border-radius: 9px; color: #18764f; background: #eefff7; font-size: 10px; font-weight: 700; }
+    .deal-alert .icon { color: var(--green); }
+    .result-card { position: relative; display: grid; grid-template-columns: 155px minmax(0, 1fr) 104px; min-height: 177px; margin-bottom: 11px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 3px 9px rgba(7,52,103,.04); transition: transform .2s, box-shadow .2s; }
+    .result-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .result-card-img { display: grid; min-height: 177px; place-items: center; padding: 12px; background: linear-gradient(135deg, #f0f8ff, #edf2f5); }
+    .result-card-img .vehicle-photo { width: 100%; height: 135px; border-radius: 8px; }
+    .result-details { padding: 18px 12px; border-right: 1px solid var(--line); }
+    .result-title-line { display: flex; align-items: start; justify-content: space-between; gap: 8px; }
+    .result-title { margin: 0; color: var(--blue-950); font-size: 14px; }
+    .result-title small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 500; }
+    .compare { padding: 4px 6px; border: 1px solid #bdcbd7; border-radius: 4px; color: var(--muted); background: #fff; font-size: 8px; font-weight: 800; white-space: nowrap; }
+    .result-specs { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0 13px; color: var(--muted); font-size: 9px; font-weight: 700; }
+    .result-specs span { display: inline-flex; align-items: center; gap: 3px; }
+    .rating-line { display: flex; align-items: center; gap: 5px; padding-top: 11px; border-top: 1px solid var(--line); color: #b67700; font-size: 9px; font-weight: 800; }
+    .rating-line span { color: var(--muted); font-weight: 600; }
+    .result-provider { margin-top: 11px; color: var(--blue-700); font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; }
+    .result-price { display: flex; flex-direction: column; align-items: end; justify-content: center; padding: 13px 12px; text-align: right; }
+    .cheaper { margin-bottom: 12px; padding: 4px 6px; border-radius: 3px; color: #168456; background: #d9f8e9; font-size: 8px; font-weight: 900; }
+    .result-price strong { color: var(--blue-950); font-size: 21px; letter-spacing: -.05em; }
+    .result-price small { color: var(--muted); font-size: 9px; }
+    .view-deal { width: 100%; min-height: 31px; margin-top: 12px; padding: 0 4px; border: 0; border-radius: 5px; color: #fff; background: var(--orange); font-size: 9px; font-weight: 900; transition: background .2s; }
+    .view-deal:hover { background: #d75b16; }
+    .heart { position: absolute; top: 9px; left: 9px; z-index: 1; display: grid; width: 23px; height: 23px; place-items: center; padding: 0; border: 1px solid #cbd8e1; border-radius: 5px; color: var(--muted); background: #fff; }
+    .heart.liked { color: #ec5e58; }
+    .heart .icon { width: 13px; height: 13px; }
+    .map-panel { position: relative; min-height: 617px; overflow: hidden; border-radius: 12px; background: #d9eee0; box-shadow: inset 0 0 0 1px rgba(7,52,103,.1); }
+    .results-page[data-view="list"] .map-panel { display: none; }
+    .results-page[data-view="list"] .results-main { grid-template-columns: 246px minmax(0, 1fr); }
+    .results-page[data-view="grid"] .map-panel { display: none; }
+    .results-page[data-view="grid"] .results-main { grid-template-columns: 246px minmax(0, 1fr); }
+    .results-page[data-view="grid"] #resultList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .results-page[data-view="grid"] .result-card { display: block; margin: 0; }
+    .results-page[data-view="grid"] .result-card-img { min-height: 150px; }
+    .results-page[data-view="grid"] .result-details { border-right: 0; }
+    .results-page[data-view="grid"] .result-price { flex-direction: row; align-items: center; border-top: 1px solid var(--line); }
+    .results-page[data-view="grid"] .view-deal { width: auto; padding: 0 10px; }
+    .map-panel::before {
+      position: absolute; inset: -30px;
+      background:
+        linear-gradient(35deg, transparent 40%, rgba(255,255,255,.72) 40.2% 41.1%, transparent 41.3%),
+        linear-gradient(147deg, transparent 42%, rgba(255,255,255,.7) 42.2% 42.8%, transparent 43%),
+        linear-gradient(75deg, transparent 55%, rgba(255,255,255,.55) 55.3% 56%, transparent 56.2%),
+        repeating-linear-gradient(28deg, rgba(100,171,139,.19) 0 12px, transparent 12px 52px);
+      content: "";
+      transform: rotate(-4deg) scale(1.1);
+    }
+    .map-panel::after { position: absolute; top: 23%; right: 29%; width: 38%; height: 35%; border: 26px solid rgba(151,205,185,.45); border-radius: 48% 56% 52% 41%; content: ""; transform: rotate(35deg); }
+    .map-label { position: absolute; z-index: 2; color: rgba(21,70,85,.7); font-size: 10px; font-weight: 800; }
+    .map-label.kathmandu { top: 43%; left: 48%; color: var(--blue-950); font-size: 16px; }
+    .map-label.patan { top: 53%; left: 45%; }
+    .map-label.bhaktapur { top: 42%; right: 12%; }
+    .map-label.nagarkot { top: 26%; right: 10%; }
+    .map-pin { position: absolute; z-index: 3; top: 49%; left: 52%; display: grid; width: 33px; height: 33px; place-items: center; border: 3px solid #fff; border-radius: 50% 50% 50% 0; color: #fff; background: var(--blue-800); box-shadow: 0 3px 9px rgba(0,0,0,.2); transform: rotate(-45deg); }
+    .map-pin .icon { width: 14px; height: 14px; transform: rotate(45deg); }
+    .map-controls { position: absolute; z-index: 5; top: 13px; right: 13px; display: grid; gap: 4px; }
+    .map-controls button { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid #cad8d4; color: var(--blue-900); background: #fff; font-size: 16px; }
+    .map-tip { position: absolute; z-index: 4; right: 14px; bottom: 14px; left: 14px; display: flex; align-items: center; justify-content: space-between; padding: 11px; border: 1px solid rgba(7,52,103,.1); border-radius: 8px; background: rgba(255,255,255,.94); box-shadow: var(--shadow-sm); font-size: 9px; font-weight: 800; }
+    .map-tip .btn { min-height: 29px; padding: 0 9px; font-size: 9px; }
+    .mobile-filter { display: none; }
+
+    /* Dialog/toast */
+    .toast { position: fixed; z-index: 50; right: 22px; bottom: 22px; max-width: 310px; padding: 14px 17px; border-radius: 10px; color: #fff; background: var(--blue-950); box-shadow: var(--shadow-lg); font-size: 12px; font-weight: 700; opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity .25s, transform .25s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .modal-backdrop { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(3,25,53,.65); opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+    .modal { width: min(420px, 100%); padding: 27px; border-radius: 17px; background: #fff; box-shadow: var(--shadow-lg); transform: translateY(12px); transition: transform .2s; }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal h2 { margin: 0; color: var(--blue-950); font-size: 22px; letter-spacing: -.04em; }
+    .modal p { color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .modal-actions { display: flex; justify-content: end; gap: 9px; margin-top: 22px; }
+
+    @media (max-width: 1050px) {
+      .hero-photo { right: 2%; width: 430px; }
+      .results-main { grid-template-columns: 220px minmax(0, 1fr); }
+      .map-panel { display: none; }
+    }
+    @media (max-width: 780px) {
+      .container { width: min(100% - 28px, 600px); }
+      .nav-links, .nav-actions .nav-login { display: none; }
+      .nav-mobile { display: grid; place-items: center; }
+      .hero { min-height: 900px; }
+      .hero-content { padding-top: 123px; padding-bottom: 300px; }
+      .hero-title { max-width: 500px; font-size: clamp(45px, 14vw, 69px); }
+      .hero-photo { top: 250px; right: -8%; bottom: auto; width: 390px; opacity: .9; }
+      .car-shadow { right: -8%; bottom: 91px; }
+      .hero-road { bottom: 70px; }
+      .hero-form { grid-template-columns: 1fr 1fr; margin-top: 31px; }
+      .hero-form .form-field:nth-child(2) { border-right: 0; }
+      .hero-form .form-field:nth-child(3) { border-top: 1px solid var(--line); }
+      .hero-form .form-field:nth-child(4) { border-top: 1px solid var(--line); border-right: 0; }
+      .hero-form .btn { grid-column: 1 / -1; }
+      .service-strip { flex-wrap: wrap; }
+      .section-head, .footer-top { display: block; }
+      .section-head .btn { margin-top: 20px; }
+      .feature-grid, .vehicle-grid { grid-template-columns: 1fr; }
+      .feature-card { min-height: 175px; }
+      .split-banner, .quote-row { grid-template-columns: 1fr; }
+      .banner-art { min-height: 250px; }
+      .banner-content { padding: 37px 27px; }
+      .footer-links { gap: 32px; margin-top: 35px; }
+      .footer-bottom { display: block; line-height: 2; }
+      .results-nav .nav-inner { height: 65px; }
+      .results-search { grid-template-columns: 1fr 1fr; }
+      .results-search .result-input:nth-child(2) { border-right: 0; }
+      .results-search .result-input:nth-child(3), .results-search .result-input:nth-child(4) { border-top: 1px solid var(--line); }
+      .results-search .btn { grid-column: 1 / -1; }
+      .results-main { display: block; width: min(100% - 22px, 600px); padding-top: 15px; }
+      .mobile-filter { display: flex; justify-content: space-between; margin-bottom: 13px; }
+      .filter-panel { display: none; }
+      .results-heading { align-items: start; }
+      .view-toggle { display: none; }
+      .sort-box { display: block; text-align: right; }
+      .sort-box span { display: none; }
+      .result-card { grid-template-columns: 116px minmax(0, 1fr); }
+      .result-card-img { min-height: 185px; }
+      .result-card-img .vehicle-photo { height: 135px; }
+      .result-price { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; padding: 10px 13px; border-top: 1px solid var(--line); }
+      .cheaper { margin: 0 5px 0 0; }
+      .result-price strong { font-size: 19px; }
+      .result-price .price-wrap { display: flex; align-items: center; gap: 8px; }
+      .result-price small { display: none; }
+      .view-deal { width: auto; min-width: 100px; margin: 0; padding: 0 12px; }
+      .result-details { border-right: 0; }
+      .map-panel { display: none; }
+      .results-page[data-view="grid"] #resultList { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 430px) {
+      .hero-form { grid-template-columns: 1fr; }
+      .hero-form .form-field, .hero-form .form-field:nth-child(2), .hero-form .form-field:nth-child(3), .hero-form .form-field:nth-child(4) { border-right: 0; border-top: 0; border-bottom: 1px solid var(--line); }
+      .hero-form .btn { margin-top: 3px; }
+      .footer-links { justify-content: space-between; }
+      .footer-links > div:last-child { display: none; }
+      .results-search { grid-template-columns: 1fr; }
+      .results-search .result-input, .results-search .result-input:nth-child(2), .results-search .result-input:nth-child(3), .results-search .result-input:nth-child(4) { border-right: 0; border-top: 0; border-bottom: 1px solid var(--line); }
+      .result-card { grid-template-columns: 104px minmax(0, 1fr); }
+      .result-card-img { padding: 5px; }
+      .result-card-img .vehicle-photo { height: 108px; }
+      .result-specs { gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Inline icon sprite keeps the page self-contained and offline-friendly. -->
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+    <symbol id="i-car" viewBox="0 0 24 24"><path d="m5 16-1 3h16l-1-3M4 16l1.6-6.2A2 2 0 0 1 7.5 8.3h9a2 2 0 0 1 1.9 1.5L20 16M7 16h.01M17 16h.01M7 12h10"/></symbol>
+    <symbol id="i-steering" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M4 11h5.2L12 14l2.8-3H20M12 14v6.5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c.5-3 2.5-5 6-5s5.5 2 6 5M16 11a3 3 0 1 0-1-5.8M17 15c2.3.2 3.7 1.8 4 4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 1.7 7.3L21 11l-7.3 1.7L12 20l-1.7-7.3L3 11l7.3-1.7L12 2Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  </svg>
+
+  <main id="homeView">
+    <header class="site-nav">
+      <div class="container nav-inner">
+        <a href="#" class="brand" aria-label="Pathil Vehicles home"><span class="brand-mark">P</span><span>pathil<small>vehicles & journeys</small></span></a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a class="active" href="#home">Home</a>
+          <a href="#fleet">Our fleet</a>
+          <a href="#why-us">Why Pathil</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="nav-actions"><a class="nav-login" href="#" data-toast="Sign in is ready for your booking account.">Sign in</a><a class="btn btn-primary" href="#search">Find a vehicle <svg class="icon"><use href="#i-arrow"/></svg></a><button class="nav-mobile" aria-label="Open menu"><svg class="icon"><use href="#i-menu"/></svg></button></div>
+      </div>
+    </header>
+
+    <section id="home" class="hero">
+      <div class="container hero-content">
+        <div class="eyebrow" style="color:var(--yellow)">Nepal, your way</div>
+        <h1 class="hero-title">Go further.<br><em>Feel free.</em></h1>
+        <p class="hero-copy">Reliable vehicles, thoughtful service, and the freedom to see Nepal at your own pace. Choose a car, a driver, or a route and let Pathil handle the rest.</p>
+        <div class="trust-row"><div class="avatar-stack"><span class="avatar">A</span><span class="avatar">S</span><span class="avatar">R</span><span class="avatar">+</span></div><span>Loved by 12,000+ travellers across Nepal</span></div>
+        <div class="service-strip" role="tablist" aria-label="Choose a service">
+          <button class="service-pill active" type="button" data-service="rent"><svg class="icon"><use href="#i-car"/></svg>Rent a car</button>
+          <button class="service-pill" type="button" data-service="driver"><svg class="icon"><use href="#i-steering"/></svg>Hire a driver</button>
+          <button class="service-pill" type="button" data-service="self"><svg class="icon"><use href="#i-arrow"/></svg>Self-drive</button>
+        </div>
+        <form id="search" class="hero-form">
+          <div class="form-field"><label id="startLabel" for="pickup">Pick-up location</label><input id="pickup" value="Kathmandu, Nepal" placeholder="City, airport or hotel" /></div>
+          <div class="form-field"><label id="endLabel" for="dropoff">Drop-off location</label><input id="dropoff" value="Kathmandu, Nepal" placeholder="Same as pick-up" /></div>
+          <div class="form-field"><label id="startDateLabel" for="pickupDate">Pick-up</label><input id="pickupDate" type="datetime-local" /></div>
+          <div class="form-field"><label id="endDateLabel" for="dropDate">Drop-off</label><input id="dropDate" type="datetime-local" /></div>
+          <div class="form-field hidden-field" id="vehicleField"><label for="vehicleType">Vehicle type</label><select id="vehicleType"><option value="">Select a vehicle</option><option>Economy car</option><option>SUV</option><option>Premium car</option><option>Van</option></select></div>
+          <button class="btn btn-primary" id="searchButton" type="submit">Find vehicles <svg class="icon"><use href="#i-arrow"/></svg></button>
+        </form>
+      </div>
+      <div class="spark one"></div><div class="spark two"></div><div class="spark three"></div>
+      <div class="hero-road"><div class="road-glow"></div></div>
+      <div class="car-shadow"></div>
+      <img class="hero-photo hero-vehicle" src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1100&q=85" alt="Real car moving along a scenic road" />
+    </section>
+
+    <section id="why-us" class="features">
+      <div class="container">
+        <div class="section-head"><div><div class="eyebrow">The Pathil promise</div><h2 class="section-title">The easy way to get moving.</h2></div><p class="section-copy">From a quick city ride to a Himalayan road trip, we make every part of your journey feel simple, safe, and looked after.</p></div>
+        <div class="feature-grid">
+          <article class="feature-card highlight"><div class="feature-icon"><svg class="icon"><use href="#i-shield"/></svg></div><h3 class="feature-title">Drive with confidence</h3><p class="feature-copy">Verified vehicles, transparent pricing, and support from a local team that knows the road.</p><span class="feature-number">01</span></article>
+          <article class="feature-card"><div class="feature-icon"><svg class="icon"><use href="#i-spark"/></svg></div><h3 class="feature-title">Made for your route</h3><p class="feature-copy">Pick the vehicle, comfort level, and service that fits the way you want to travel.</p><span class="feature-number">02</span></article>
+          <article class="feature-card"><div class="feature-icon"><svg class="icon"><use href="#i-users"/></svg></div><h3 class="feature-title">People-first support</h3><p class="feature-copy">A friendly local team is one call away before, during, and after your booking.</p><span class="feature-number">03</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="fleet" class="popular">
+      <div class="container">
+        <div class="section-head"><div><div class="eyebrow">Choose your companion</div><h2 class="section-title">A vehicle for every kind of Nepal.</h2></div><a class="btn btn-ghost" href="#fleet" data-open-results>See all vehicles <svg class="icon"><use href="#i-arrow"/></svg></a></div>
+        <div class="vehicle-grid">
+          <article class="vehicle-card"><div class="vehicle-visual"><span class="vehicle-label">City favourite</span><img class="vehicle-photo" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=85" alt="Real car driving on a city road" /></div><div class="vehicle-body"><div class="vehicle-name-row"><div><h3 class="vehicle-name">Pathil City Sedan</h3><p class="vehicle-sub">Compact · automatic</p></div><div class="price">$34<small>per day</small></div></div><div class="specs"><span class="spec">● 5 seats</span><span class="spec">◈ 2 bags</span><span class="spec">⌁ A/C</span></div><div class="vehicle-footer"><span class="rating">★ 4.8 <span style="color:var(--muted);font-weight:600">(42 trips)</span></span><a href="detail.html?id=1&service=rent">View details →</a></div></div></article>
+          <article class="vehicle-card"><div class="vehicle-visual"><span class="vehicle-label">Family ready</span><img class="vehicle-photo" src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=85" alt="Real white car moving through the mountains" /></div><div class="vehicle-body"><div class="vehicle-name-row"><div><h3 class="vehicle-name">Pathil Comfort</h3><p class="vehicle-sub">Comfort · automatic</p></div><div class="price">$57<small>per day</small></div></div><div class="specs"><span class="spec">● 5 seats</span><span class="spec">◈ 3 bags</span><span class="spec">⌁ A/C</span></div><div class="vehicle-footer"><span class="rating">★ 4.9 <span style="color:var(--muted);font-weight:600">(68 trips)</span></span><a href="detail.html?id=2&service=rent">View details →</a></div></div></article>
+          <article class="vehicle-card"><div class="vehicle-visual"><span class="vehicle-label">Mountain explorer</span><img class="vehicle-photo" src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=900&q=85" alt="Real touring car moving on a forest road" /></div><div class="vehicle-body"><div class="vehicle-name-row"><div><h3 class="vehicle-name">Pathil Explorer</h3><p class="vehicle-sub">Road trip · manual</p></div><div class="price">$72<small>per day</small></div></div><div class="specs"><span class="spec">● 5 seats</span><span class="spec">◈ 4 bags</span><span class="spec">⌁ A/C</span></div><div class="vehicle-footer"><span class="rating">★ 4.9 <span style="color:var(--muted);font-weight:600">(31 trips)</span></span><a href="detail.html?id=3&service=self">View details →</a></div></div></article>
+        </div>
+        <div class="split-banner"><div class="banner-art"><div class="mountain"></div><img class="banner-car" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1000&q=85" alt="Real car moving on a forest road" /></div><div class="banner-content"><div class="eyebrow" style="color:var(--yellow)">Journeys, not just bookings</div><h2 class="section-title">Make the road part of the story.</h2><p class="section-copy">Need a driver who knows the best chai stop? Planning a multi-day escape? Tell us where you want to go, and we’ll help you get there.</p><a class="btn btn-primary" href="#contact">Plan my journey <svg class="icon"><use href="#i-arrow"/></svg></a></div></div>
+      </div>
+    </section>
+
+    <section class="testimonials"><div class="container quote-row"><div><div class="eyebrow">A better way to travel</div><div class="quote">“Pathil made our road trip feel effortless. The car was spotless, and the team gave us the best route to Pokhara.”</div><div class="quote-by"><span class="quote-mark">S</span><span>Shreya & Amit<br><small style="font-weight:500">Kathmandu → Pokhara</small></span></div></div><div class="metric-list"><div class="metric"><b>5k+</b><span>vehicles ready to move</span></div><div class="metric"><b>12k</b><span>happy travellers</span></div><div class="metric"><b>30 yrs</b><span>local travel experience</span></div><div class="metric"><b>24/7</b><span>on-road support</span></div></div></div></section>
+    <footer id="contact"><div class="container"><div class="footer-top"><div><a href="#" class="brand"><span class="brand-mark">P</span><span>pathil<small>vehicles & journeys</small></span></a><p class="footer-intro">Thoughtful travel, reliable vehicles, and local care for every road in Nepal.</p></div><div class="footer-links"><div><h4>Explore</h4><a href="#fleet">Our fleet</a><a href="#why-us">Why Pathil</a><a href="#search">Book a vehicle</a></div><div><h4>Talk to us</h4><a href="tel:+9779851126531">+977 9851126531</a><a href="mailto:hello@pathilvehicles.com">hello@pathilvehicles.com</a><a href="#">Tinkune, Kathmandu</a></div></div></div><div class="footer-bottom"><span>© 2026 Pathil Vehicles. A Pathil Holidays experience.</span><span>Built for better journeys in Nepal.</span></div></div></footer>
+  </main>
+
+  <main id="resultsView" class="results-page hide">
+    <header class="results-nav"><div class="container nav-inner"><a href="#" class="brand"><span class="brand-mark">P</span><span>pathil<small>vehicles & journeys</small></span></a><nav class="nav-links"><a class="active" href="#">Search vehicles</a><a href="#" data-toast="Your saved trips will appear here.">Saved trips</a><a href="#" data-toast="Support is available 24/7.">Help</a></nav><div class="nav-actions"><a class="nav-login" href="#" data-toast="Sign in is ready for your booking account.">Sign in</a><button class="nav-mobile" aria-label="Open menu"><svg class="icon"><use href="#i-menu"/></svg></button></div></div></header>
+    <div class="results-search-wrap"><form id="resultsSearch" class="container results-search"><div class="result-input"><svg class="icon"><use href="#i-pin"/></svg><div><label>Pick-up</label><input value="Kathmandu, Nepal" /></div></div><div class="result-input"><svg class="icon"><use href="#i-pin"/></svg><div><label>Drop-off</label><input value="Kathmandu, Nepal" /></div></div><div class="result-input"><svg class="icon"><use href="#i-calendar"/></svg><div><label>Pick-up</label><input value="18 Oct, 2026 · 1:00 PM" /></div></div><div class="result-input"><svg class="icon"><use href="#i-calendar"/></svg><div><label>Drop-off</label><input value="21 Oct, 2026 · 11:00 AM" /></div></div><button class="btn btn-primary" type="submit">Update search</button></form></div>
+    <div class="results-main">
+      <aside class="filter-panel"><div class="filter-head"><b>Filter results</b><button class="clear-btn" id="clearFilters">Clear all</button></div><div class="filter-group"><div class="filter-title">Vehicle type <span>⌃</span></div><label class="check"><input type="checkbox" checked /> Economy <em>12</em></label><label class="check"><input type="checkbox" checked /> SUV <em>8</em></label><label class="check"><input type="checkbox" /> Luxury <em>4</em></label><label class="check"><input type="checkbox" /> Van / people carrier <em>5</em></label></div><div class="filter-group"><div class="filter-title">Transmission <span>⌃</span></div><label class="check"><input type="checkbox" checked /> Automatic <em>19</em></label><label class="check"><input type="checkbox" /> Manual <em>10</em></label></div><div class="filter-group"><div class="filter-title">Price per day <span>⌃</span></div><input class="range" type="range" min="20" max="150" value="100" /><div class="range-label"><span>$20</span><span>$100+</span></div></div><div class="filter-group"><div class="filter-title">Rental company <span>⌃</span></div><label class="check"><input type="checkbox" /> Pathil Select <em>14</em></label><label class="check"><input type="checkbox" /> Avis <em>9</em></label></div></aside>
+      <section class="results-column"><div class="mobile-filter"><button class="btn btn-ghost" id="mobileFilters">☷ &nbsp; Filters</button><div class="sort-box"><span>Sort by:</span><select><option>Our recommendation</option><option>Price: low to high</option><option>Rating</option></select></div></div><div class="results-heading"><div><h1>Cars in Kathmandu</h1><p>29 vehicles found · 18–21 Oct 2026 · 3 days</p></div><div style="display:flex;align-items:center;gap:10px"><div class="view-toggle" role="group" aria-label="Results view"><button type="button" class="active" data-view="map">Map</button><button type="button" data-view="list">List</button><button type="button" data-view="grid">Grid</button></div><div class="sort-box"><span>Sort by:</span><select><option>Our recommendation</option><option>Price: low to high</option><option>Rating</option></select></div></div></div><div class="deal-alert"><svg class="icon"><use href="#i-spark"/></svg><span>Book now. Prices are unlikely to drop before your rental.</span><span style="margin-left:auto">Price lock <span style="display:inline-block;width:27px;height:15px;margin-left:4px;vertical-align:-3px;border-radius:10px;background:var(--green);position:relative"><i style="position:absolute;right:2px;top:2px;width:11px;height:11px;border-radius:50%;background:#fff"></i></span></span></div><div id="resultList"></div></section>
+      <aside class="map-panel" id="mapPanel"><span class="map-label kathmandu">Kathmandu</span><span class="map-label patan">Patan</span><span class="map-label bhaktapur">Bhaktapur</span><span class="map-label nagarkot">Nagarkot</span><div class="map-controls"><button type="button" data-map-zoom="in">+</button><button type="button" data-map-zoom="out">−</button></div><div class="map-tip"><span>Compare sites via Pathil</span><button class="btn btn-blue" type="button" id="mapViewButton">View map</button></div></aside>
+    </div>
+  </main>
+
+  <!-- Reusable car illustrations used in cards. -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="bluePaint" x1="0" x2="1"><stop stop-color="#1564ab"/><stop offset=".55" stop-color="#43aee2"/><stop offset="1" stop-color="#125287"/></linearGradient>
+      <linearGradient id="whitePaint" x1="0" x2="1"><stop stop-color="#f7fbfd"/><stop offset=".55" stop-color="#b9ccd5"/><stop offset="1" stop-color="#7e9aa9"/></linearGradient>
+      <linearGradient id="blackPaint" x1="0" x2="1"><stop stop-color="#263c52"/><stop offset=".5" stop-color="#637789"/><stop offset="1" stop-color="#172b40"/></linearGradient>
+      <linearGradient id="yellowPaint" x1="0" x2="1"><stop stop-color="#f4ac1f"/><stop offset=".6" stop-color="#ffd84c"/><stop offset="1" stop-color="#db8414"/></linearGradient>
+      <linearGradient id="cardGlass" x1="0" x2="0" y2="1"><stop stop-color="#d4f5fe"/><stop offset="1" stop-color="#4788a9"/></linearGradient>
+      <symbol id="car-blue" viewBox="0 0 500 260"><path d="M61 183c-3-22 14-40 40-47l43-11 46-55c7-9 17-14 28-14h85c20 0 39 10 51 27l28 39 44 10c18 4 31 20 31 39v27H61Z" fill="url(#bluePaint)" stroke="#063567" stroke-width="5"/><path d="m200 77-42 49h61l14-50h-33ZM245 76l-13 50h78l-9-50h-56Z" fill="url(#cardGlass)" stroke="#075084" stroke-width="4"/><path d="M71 162h335" stroke="#a7e7f4" stroke-width="5" opacity=".6"/><path d="M381 137h34M106 128h39" stroke="#ffc928" stroke-width="7" stroke-linecap="round"/><circle cx="139" cy="188" r="35" fill="#092d54" stroke="#071e3d" stroke-width="5"/><circle cx="139" cy="188" r="17" fill="#90a9b7"/><circle cx="139" cy="188" r="7" fill="#f4f8f9"/><circle cx="384" cy="188" r="35" fill="#092d54" stroke="#071e3d" stroke-width="5"/><circle cx="384" cy="188" r="17" fill="#90a9b7"/><circle cx="384" cy="188" r="7" fill="#f4f8f9"/><path d="M225 146h112" stroke="#063567" stroke-width="3" opacity=".45"/></symbol>
+      <symbol id="car-white" viewBox="0 0 500 260"><path d="M61 183c-3-22 14-40 40-47l43-11 46-55c7-9 17-14 28-14h85c20 0 39 10 51 27l28 39 44 10c18 4 31 20 31 39v27H61Z" fill="url(#whitePaint)" stroke="#476b80" stroke-width="5"/><path d="m200 77-42 49h61l14-50h-33ZM245 76l-13 50h78l-9-50h-56Z" fill="url(#cardGlass)" stroke="#477c95" stroke-width="4"/><path d="M71 162h335M381 137h34" stroke="#ffc928" stroke-width="5" stroke-linecap="round"/><circle cx="139" cy="188" r="35" fill="#263e51" stroke="#182c3e" stroke-width="5"/><circle cx="139" cy="188" r="17" fill="#b9c9ce"/><circle cx="139" cy="188" r="7" fill="#fff"/><circle cx="384" cy="188" r="35" fill="#263e51" stroke="#182c3e" stroke-width="5"/><circle cx="384" cy="188" r="17" fill="#b9c9ce"/><circle cx="384" cy="188" r="7" fill="#fff"/></symbol>
+      <symbol id="car-black" viewBox="0 0 500 260"><path d="M61 183c-3-22 14-40 40-47l43-11 46-55c7-9 17-14 28-14h85c20 0 39 10 51 27l28 39 44 10c18 4 31 20 31 39v27H61Z" fill="url(#blackPaint)" stroke="#132d48" stroke-width="5"/><path d="m200 77-42 49h61l14-50h-33ZM245 76l-13 50h78l-9-50h-56Z" fill="url(#cardGlass)" stroke="#174c70" stroke-width="4"/><path d="M71 162h335M381 137h34" stroke="#ffc928" stroke-width="6" stroke-linecap="round"/><circle cx="139" cy="188" r="35" fill="#172b40" stroke="#071c34" stroke-width="5"/><circle cx="139" cy="188" r="17" fill="#879dab"/><circle cx="139" cy="188" r="7" fill="#fff"/><circle cx="384" cy="188" r="35" fill="#172b40" stroke="#071c34" stroke-width="5"/><circle cx="384" cy="188" r="17" fill="#879dab"/><circle cx="384" cy="188" r="7" fill="#fff"/></symbol>
+      <symbol id="car-yellow" viewBox="0 0 500 260"><path d="M61 183c-3-22 14-40 40-47l43-11 46-55c7-9 17-14 28-14h85c20 0 39 10 51 27l28 39 44 10c18 4 31 20 31 39v27H61Z" fill="url(#yellowPaint)" stroke="#9e6715" stroke-width="5"/><path d="m200 77-42 49h61l14-50h-33ZM245 76l-13 50h78l-9-50h-56Z" fill="url(#cardGlass)" stroke="#84611c" stroke-width="4"/><path d="M71 162h335M106 128h39" stroke="#fff8c5" stroke-width="6" stroke-linecap="round"/><circle cx="139" cy="188" r="35" fill="#26394b" stroke="#152639" stroke-width="5"/><circle cx="139" cy="188" r="17" fill="#a3b5bd"/><circle cx="139" cy="188" r="7" fill="#fff"/><circle cx="384" cy="188" r="35" fill="#26394b" stroke="#152639" stroke-width="5"/><circle cx="384" cy="188" r="17" fill="#a3b5bd"/><circle cx="384" cy="188" r="7" fill="#fff"/></symbol>
+    </defs>
+  </svg>
+
+  <div id="toast" class="toast" role="status"></div>
+  <div id="modalBackdrop" class="modal-backdrop"><div class="modal"><h2 id="modalTitle">Your Pathil booking</h2><p id="modalText">You are one step away from a better journey.</p><div class="modal-actions"><button class="btn btn-ghost" id="modalClose">Close</button><button class="btn btn-primary" id="modalAction">Continue</button></div></div></div>
+
+  <script>
+    const homeView = document.querySelector('#homeView');
+    const resultsView = document.querySelector('#resultsView');
+    const toast = document.querySelector('#toast');
+    const modalBackdrop = document.querySelector('#modalBackdrop');
+    let toastTimer;
+
+    const carData = [
+      { name: 'Pathil City Sedan', type: 'or similar compact', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=85', price: 60, cheaper: '29% cheaper', specs: ['5 seats', '3 bags', 'Automatic'], rating: '4.8', reviews: '84 reviews', location: 'Thamel Road, Kathmandu', pin: [35, 45] },
+      { name: 'Pathil Comfort', type: 'or similar touring car', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=85', price: 60, cheaper: '29% cheaper', specs: ['5 seats', '2 bags', 'Automatic'], rating: '4.7', reviews: '56 reviews', location: 'Trade Tower, Kathmandu', pin: [55, 58] },
+      { name: 'Pathil Grand Tourer', type: 'or similar premium', image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=700&q=85', price: 70, cheaper: '24% cheaper', specs: ['5 seats', '3 bags', 'Automatic'], rating: '4.9', reviews: '112 reviews', location: 'Tribhuvan Airport, Kathmandu', pin: [76, 36] },
+      { name: 'Pathil Explorer', type: 'or similar road trip', image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=700&q=85', price: 82, cheaper: '18% cheaper', specs: ['5 seats', '4 bags', 'Manual'], rating: '4.9', reviews: '38 reviews', location: 'Lakeside pickup, Pokhara', pin: [22, 28] },
+      { name: 'Pathil Group Van', type: 'or similar passenger van', image: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=700&q=85', price: 96, cheaper: '15% cheaper', specs: ['12 seats', '6 bags', 'Manual'], rating: '4.8', reviews: '23 reviews', location: 'Tinkune, Kathmandu', pin: [64, 78] }
+    ];
+
+    const icon = (id) => `<svg class="icon"><use href="#i-${id}"></use></svg>`;
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+    function setDefaultDates() {
+      const now = new Date();
+      const later = new Date(now.getTime() + 72 * 60 * 60 * 1000);
+      const toLocal = d => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.querySelector('#pickupDate').value = toLocal(now);
+      document.querySelector('#dropDate').value = toLocal(later);
+    }
+    const serviceConfig = {
+      rent: { start: 'Pick-up location', end: 'Drop-off location', startDate: 'Pick-up', endDate: 'Drop-off', button: 'Find vehicles', placeholder: 'City, airport or hotel', showVehicle: false },
+      driver: { start: 'From', end: 'To', startDate: 'From date', endDate: 'To date', button: 'Find driver', placeholder: 'City, airport or hotel', showVehicle: true },
+      self: { start: 'From', end: 'To', startDate: 'From date', endDate: 'To date', button: 'Find vehicle', placeholder: 'City, airport or hotel', showVehicle: false }
+    };
+    let selectedService = 'rent';
+    function updateBookingForm(service) {
+      selectedService = service;
+      const config = serviceConfig[service];
+      document.querySelector('#startLabel').textContent = config.start;
+      document.querySelector('#endLabel').textContent = config.end;
+      document.querySelector('#startDateLabel').textContent = config.startDate;
+      document.querySelector('#endDateLabel').textContent = config.endDate;
+      document.querySelector('#pickup').placeholder = config.placeholder;
+      document.querySelector('#vehicleField').classList.toggle('hidden-field', !config.showVehicle);
+      document.querySelector('#searchButton').firstChild.textContent = `${config.button} `;
+    }
+    function openResults(event) {
+      if (event) event.preventDefault();
+      homeView.classList.add('hide');
+      resultsView.classList.remove('hide');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      renderResults();
+    }
+    function openHome(event) {
+      if (event) event.preventDefault();
+      resultsView.classList.add('hide');
+      homeView.classList.remove('hide');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    function renderResults() {
+      const list = document.querySelector('#resultList');
+      list.innerHTML = carData.map((car, index) => `
+        <article class="result-card">
+          <button class="heart" aria-label="Save ${car.name}" data-heart="${index}">${icon('heart')}</button>
+          <div class="result-card-img"><img class="vehicle-photo" src="${car.image}" alt="Real ${car.name} rental vehicle" /></div>
+          <div class="result-details">
+            <div class="result-title-line"><h2 class="result-title">${car.name}<small>${car.type}</small></h2><button class="compare" data-toast="Added ${car.name} to compare">□ Compare</button></div>
+            <div class="result-specs"><span>${icon('users')} ${car.specs[0]}</span><span>◈ ${car.specs[1]}</span><span>${icon('car')} ${car.specs[2]}</span></div>
+            <div class="rating-line">★ ${car.rating} <span>Good offer · ${car.reviews}</span></div>
+            <div class="result-provider">${car.provider}</div>
+            <div style="margin-top:5px;color:var(--muted);font-size:9px">${car.location}</div>
+          </div>
+          <div class="result-price"><span class="cheaper">${car.cheaper}</span><div class="price-wrap"><div><strong>$${car.price}</strong><small> total · 3 days</small></div><a class="view-deal" href="detail.html?id=${index + 1}&service=${selectedService}" data-deal="${car.name}">View deal</a></div></div>
+        </article>
+      `).join('');
+      list.querySelectorAll('[data-heart]').forEach(btn => btn.addEventListener('click', () => {
+        btn.classList.toggle('liked');
+        showToast(btn.classList.contains('liked') ? 'Saved to your Pathil trips.' : 'Removed from saved trips.');
+      }));
+      list.querySelectorAll('[data-deal]').forEach(btn => btn.addEventListener('click', () => {
+        const index = [...list.querySelectorAll('[data-deal]')].indexOf(btn);
+        btn.href = `detail.html?id=${index + 1}&service=${selectedService}`;
+      }));
+      list.querySelectorAll('[data-toast]').forEach(btn => btn.addEventListener('click', () => showToast(btn.dataset.toast)));
+      renderMapPins();
+    }
+
+    function renderMapPins() {
+      const panel = document.querySelector('#mapPanel');
+      panel.querySelectorAll('.dynamic-pin').forEach(pin => pin.remove());
+      carData.forEach((car, index) => {
+        const pin = document.createElement('button');
+        pin.type = 'button';
+        pin.className = 'map-pin dynamic-pin';
+        pin.style.left = `${car.pin[0]}%`;
+        pin.style.top = `${car.pin[1]}%`;
+        pin.title = `Open ${car.name}`;
+        pin.innerHTML = icon('car');
+        pin.addEventListener('click', () => { window.location.href = `detail.html?id=${index + 1}&service=${selectedService}`; });
+        panel.appendChild(pin);
+      });
+    }
+
+    setDefaultDates();
+    updateBookingForm(selectedService);
+    document.querySelectorAll('.service-pill').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.service-pill').forEach(item => item.classList.remove('active'));
+      btn.classList.add('active');
+      updateBookingForm(btn.dataset.service);
+      showToast(`${serviceConfig[btn.dataset.service].button} selected.`);
+    }));
+    document.querySelector('#search').addEventListener('submit', openResults);
+    document.querySelector('#resultsSearch').addEventListener('submit', e => { e.preventDefault(); showToast('Search updated — showing the best matches first.'); });
+    document.querySelectorAll('.view-toggle button').forEach(button => button.addEventListener('click', () => {
+      resultsView.dataset.view = button.dataset.view;
+      document.querySelectorAll('.view-toggle button').forEach(item => item.classList.toggle('active', item === button));
+    }));
+    document.querySelectorAll('[data-map-zoom]').forEach(button => button.addEventListener('click', () => showToast(button.dataset.mapZoom === 'in' ? 'Map zoomed in.' : 'Map zoomed out.')));
+    document.querySelector('#mapViewButton').addEventListener('click', () => showToast('Map view is already open. Select a vehicle pin to view its deal.'));
+    document.querySelectorAll('[data-open-results]').forEach(link => link.addEventListener('click', e => {
+      e.preventDefault();
+      openResults(e);
+    }));
+    document.querySelectorAll('a[href="#search"]').forEach(link => link.addEventListener('click', e => {
+      if (!resultsView.classList.contains('hide')) return;
+      const search = document.querySelector('#search');
+      if (link.closest('.hero')) return;
+      e.preventDefault();
+      search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelector('#pickup').focus();
+    }));
+    document.querySelectorAll('[data-toast]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); showToast(btn.dataset.toast); }));
+    document.querySelectorAll('.brand').forEach(brand => brand.addEventListener('click', openHome));
+    document.querySelector('#clearFilters').addEventListener('click', () => {
+      document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(input => input.checked = false);
+      showToast('Filters cleared.');
+    });
+    document.querySelector('#mobileFilters').addEventListener('click', () => showToast('On mobile, filters are ready to expand here.'));
+    document.querySelector('#modalClose').addEventListener('click', () => modalBackdrop.classList.remove('open'));
+    document.querySelector('#modalAction').addEventListener('click', () => { modalBackdrop.classList.remove('open'); showToast('Booking flow connected in the next step.'); });
+    modalBackdrop.addEventListener('click', e => { if (e.target === modalBackdrop) modalBackdrop.classList.remove('open'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') modalBackdrop.classList.remove('open'); });
+  </script>
+</body>
+</html>

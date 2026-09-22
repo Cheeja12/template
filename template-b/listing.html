@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vehicle listing — Pathil Vehicle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #12324d; --navy-deep: #0b2236; --gold: #c9a227; --gold-soft: #f7efd6;
+      --teal: #1a6b6b; --ink: #1c2a33; --muted: #5c6b76; --line: #e4e9ee; --bg: #f7f5f1; --green: #1a8f4a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Nunito Sans", sans-serif; color: var(--ink); background: var(--bg); }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .topbar {
+      background: var(--navy-deep); color: #c9d5e0; font-size: .78rem;
+      padding: 7px 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .currencies button {
+      background: none; border: none; color: #c9d5e0; cursor: pointer; font-weight: 700; font-size: .75rem; margin-left: 8px;
+    }
+    .currencies button.active { color: var(--gold); }
+
+    .nav {
+      background: #fff; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px; position: sticky; top: 0; z-index: 50;
+    }
+    .brand {
+      font-family: "Cormorant Garamond", serif; font-size: 1.6rem; font-weight: 700; color: var(--navy);
+    }
+    .brand small {
+      display: block; font-family: "Nunito Sans", sans-serif; font-size: .6rem;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 700;
+    }
+    .menu { display: flex; gap: 18px; font-weight: 700; font-size: .88rem; color: var(--navy); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; border-radius: 4px; padding: 10px 16px; font-weight: 800;
+      cursor: pointer; text-transform: uppercase; letter-spacing: .05em; font-size: .78rem;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy-deep); }
+    .btn-navy { background: var(--navy); color: #fff; }
+
+    .search-strip {
+      background: #fff; border-bottom: 1px solid var(--line); padding: 12px 24px;
+      box-shadow: 0 2px 10px rgba(18,50,77,.05);
+    }
+    .search-bar {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr .9fr auto; gap: 10px; align-items: end;
+    }
+    .field label {
+      display: block; font-size: .68rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--muted); margin-bottom: 4px;
+    }
+    .field input, .field select {
+      width: 100%; border: 1px solid var(--line); border-radius: 4px; padding: 9px 11px; background: #fafafa;
+    }
+
+    .service-strip {
+      max-width: 1200px; margin: 0 auto; padding: 14px 24px 0;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .service-strip > span {
+      font-family: "Cormorant Garamond", serif; font-size: 1.25rem; color: var(--navy); margin-right: 6px;
+    }
+    .svc {
+      position: relative; border: 2px solid transparent; background: #fff; border-radius: 6px;
+      padding: 10px 16px; font-weight: 800; font-size: .85rem; cursor: pointer; color: var(--navy);
+    }
+    .svc.active { border-color: var(--green); }
+    .svc .check {
+      display: none; position: absolute; top: -6px; right: -6px; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--green); color: #fff; font-size: .65rem;
+      align-items: center; justify-content: center;
+    }
+    .svc.active .check { display: flex; }
+
+    .shell {
+      max-width: 1200px; margin: 16px auto 48px; padding: 0 24px;
+      display: grid; grid-template-columns: 230px 1fr; gap: 16px;
+    }
+    .filters {
+      background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 14px;
+      height: fit-content; position: sticky; top: 70px; border-top: 3px solid var(--gold);
+    }
+    .filters h3 {
+      font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
+      color: var(--muted); margin: 12px 0 8px; font-weight: 800;
+    }
+    .filters h3:first-child { margin-top: 0; }
+    .check-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; font-size: .88rem; cursor: pointer; }
+    .check-row input { accent-color: var(--teal); }
+    .price-range { width: 100%; accent-color: var(--gold); }
+    .price-labels { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); }
+
+    .head {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .head h1 {
+      font-family: "Cormorant Garamond", serif; font-size: 1.6rem; color: var(--navy);
+    }
+    .head h1 strong { color: var(--teal); }
+    .view-toggle { display: flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: #fff; }
+    .view-toggle button {
+      border: none; background: transparent; padding: 8px 12px; cursor: pointer;
+      font-weight: 800; font-size: .75rem; text-transform: uppercase; color: var(--muted);
+    }
+    .view-toggle button.active { background: var(--navy); color: #fff; }
+
+    .layout-map .list-only { display: none; }
+    .layout-list .map-split, .layout-grid .map-split { display: none; }
+    .layout-map .map-split {
+      display: grid; grid-template-columns: 1.05fr .95fr; gap: 12px; min-height: 560px;
+    }
+    .map-pane {
+      position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); min-height: 480px;
+      background: linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.4)),
+        url('https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1000&q=70') center/cover;
+    }
+    .map-check {
+      position: absolute; top: 10px; left: 10px; z-index: 2; background: #fff;
+      padding: 7px 10px; border-radius: 4px; font-size: .78rem; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    .pin {
+      position: absolute; transform: translate(-50%,-100%); background: #fff;
+      border: 2px solid var(--teal); border-radius: 999px; padding: 5px 9px;
+      font-size: .75rem; font-weight: 800; cursor: pointer; white-space: nowrap;
+    }
+    .pin.active, .pin:hover { background: var(--teal); color: #fff; }
+
+    .results-list, .map-list { display: flex; flex-direction: column; gap: 10px; }
+    .map-list { overflow: auto; max-height: 560px; }
+
+    .card {
+      display: grid; grid-template-columns: 190px 1fr auto; gap: 14px;
+      background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 12px; cursor: pointer;
+    }
+    .card:hover, .card.active { box-shadow: 0 8px 24px rgba(18,50,77,.1); border-color: #c5d4e0; }
+    .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 4px; }
+    .card h3 { font-size: 1.05rem; color: var(--navy); margin-bottom: 4px; }
+    .meta { font-size: .82rem; color: var(--muted); margin-bottom: 8px; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tags span {
+      font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
+      border: 1px solid var(--line); padding: 3px 6px; border-radius: 3px; color: var(--muted);
+    }
+    .badge {
+      display: inline-block; background: #e11d48; color: #fff; font-size: .65rem;
+      font-weight: 800; text-transform: uppercase; padding: 3px 6px; border-radius: 3px; margin-bottom: 6px;
+    }
+    .price-col { text-align: right; min-width: 130px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
+    .price { font-weight: 800; font-size: 1.15rem; color: var(--teal); }
+    .price small { display: block; font-size: .7rem; color: var(--muted); font-weight: 600; }
+
+    .compact {
+      display: grid; grid-template-columns: 90px 1fr; gap: 10px;
+      background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 8px; cursor: pointer;
+    }
+    .compact.active { border-color: var(--teal); }
+    .compact img { width: 100%; height: 64px; object-fit: cover; border-radius: 4px; }
+    .compact h4 { font-size: .9rem; color: var(--navy); }
+    .compact .p { font-weight: 800; color: var(--teal); margin-top: 4px; font-size: .85rem; }
+
+    .layout-grid .list-only { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .layout-grid .card { grid-template-columns: 1fr; }
+    .layout-grid .card img { height: 140px; }
+    .layout-grid .price-col { flex-direction: row; width: 100%; align-items: center; text-align: left; }
+
+    .crumb { font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+    .crumb a:hover { color: var(--teal); }
+    .empty { background: #fff; border: 1px dashed var(--line); padding: 40px; text-align: center; color: var(--muted); border-radius: 6px; }
+    .foot { text-align: center; padding: 16px; font-size: .8rem; color: var(--muted); background: #efece6; }
+
+    @media (max-width: 960px) {
+      .shell { grid-template-columns: 1fr; }
+      .filters { position: static; }
+      .search-bar { grid-template-columns: 1fr 1fr; }
+      .layout-map .map-split { grid-template-columns: 1fr; }
+      .layout-grid .list-only { grid-template-columns: 1fr 1fr; }
+      .menu { display: none; }
+    }
+    @media (max-width: 600px) {
+      .card { grid-template-columns: 1fr; }
+      .price-col { flex-direction: row; align-items: center; text-align: left; }
+      .layout-grid .list-only { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span>Subidhanagar-32, Tinkune · 9851126531</span>
+    <div class="currencies" id="currencyBar">
+      <button type="button" class="active" data-cur="NPR">NPR</button>
+      <button type="button" data-cur="USD">USD</button>
+      <button type="button" data-cur="EUR">EUR</button>
+      <button type="button" data-cur="INR">INR</button>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a class="brand" href="index.html">Pathil<small>Vehicle</small></a>
+    <div class="menu">
+      <a href="index.html">Home</a>
+      <a href="listing.html">Listing</a>
+      <a href="detail.html">Detail</a>
+      <a href="../template-a/listing.html">Kayak listing</a>
+    </div>
+    <a class="btn btn-navy" href="index.html">Back home</a>
+  </nav>
+
+  <div class="search-strip">
+    <form class="search-bar" onsubmit="event.preventDefault(); render();">
+      <div class="field"><label>Destination</label><input type="text" id="loc" value="Kathmandu, Nepal" /></div>
+      <div class="field"><label>Pick-up</label><input type="date" id="pickup" /></div>
+      <div class="field"><label>Drop-off</label><input type="date" id="dropoff" /></div>
+      <div class="field">
+        <label>Sort</label>
+        <select id="sort">
+          <option value="rank">Recommended</option>
+          <option value="price_asc">Price ↑</option>
+          <option value="price_desc">Price ↓</option>
+          <option value="rating">Top rated</option>
+        </select>
+      </div>
+      <button class="btn btn-gold" type="submit">Search</button>
+    </form>
+  </div>
+
+  <div class="service-strip">
+    <span>Choose a service</span>
+    <button type="button" class="svc active" data-service="rent"><span class="check">✓</span> Rent a Car</button>
+    <button type="button" class="svc" data-service="driver"><span class="check">✓</span> Hire a Driver</button>
+    <button type="button" class="svc" data-service="self"><span class="check">✓</span> Self-Drive</button>
+  </div>
+
+  <div class="shell">
+    <aside class="filters" id="filters">
+      <h3>Vehicle type</h3>
+      <label class="check-row"><input type="checkbox" data-f="type" value="Hatchback" checked /> Hatchback</label>
+      <label class="check-row"><input type="checkbox" data-f="type" value="Sedan" checked /> Sedan</label>
+      <label class="check-row"><input type="checkbox" data-f="type" value="SUV" checked /> SUV</label>
+      <label class="check-row"><input type="checkbox" data-f="type" value="Van" checked /> Van</label>
+      <h3>Price / day</h3>
+      <input class="price-range" type="range" id="priceMax" min="1000" max="15000" step="500" value="15000" />
+      <div class="price-labels"><span>NPR 1k</span><span id="priceLabel">15k+</span></div>
+      <h3>Fuel</h3>
+      <label class="check-row"><input type="checkbox" data-f="fuel" value="Petrol" checked /> Petrol</label>
+      <label class="check-row"><input type="checkbox" data-f="fuel" value="Diesel" checked /> Diesel</label>
+      <label class="check-row"><input type="checkbox" data-f="fuel" value="Electric" checked /> Electric</label>
+      <h3>Extras</h3>
+      <label class="check-row"><input type="checkbox" checked /> Free cancellation</label>
+      <label class="check-row"><input type="checkbox" checked /> Flexible</label>
+    </aside>
+
+    <section>
+      <div class="crumb"><a href="index.html">Home</a> · Cab listing · Kathmandu</div>
+      <div class="head">
+        <h1><strong id="count">8</strong> vehicles · <span id="svcLabel">Rent a Car</span></h1>
+        <div class="view-toggle">
+          <button type="button" class="active" data-view="map">Map</button>
+          <button type="button" data-view="list">List</button>
+          <button type="button" data-view="grid">Grid</button>
+        </div>
+      </div>
+      <div id="layout" class="layout-map">
+        <div class="list-only results-list" id="list"></div>
+        <div class="map-split">
+          <div class="map-pane" id="map"><label class="map-check"><input type="checkbox" /> Search as I move the map</label></div>
+          <div class="map-list" id="mapList"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">copyright © 2026 pathil holidays · Pathil Vehicle listing</div>
+
+  <script>
+    const RATES = { NPR: 1, USD: 0.0075, EUR: 0.0069, INR: 0.62 };
+    const SYMBOL = { NPR: "NPR ", USD: "$", EUR: "€", INR: "₹" };
+    const CARS = [
+      { id: 1, name: "Hyundai i20 City Hop", type: "Hatchback", fuel: "Petrol", rating: 4.6, price: 2250, hot: true, loc: "Thamel", img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=80", pin: [28, 42], tags: ["Experience","Flexible"] },
+      { id: 2, name: "Corolla Airport Run", type: "Sedan", fuel: "Petrol", rating: 4.8, price: 3200, hot: false, loc: "Airport", img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80", pin: [55, 38], tags: ["Inclusion","Flexible"] },
+      { id: 3, name: "Swift Valley Day", type: "Hatchback", fuel: "Petrol", rating: 4.4, price: 1800, hot: false, loc: "Lazimpat", img: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600&q=80", pin: [40, 62], tags: ["Experience","Max 4"] },
+      { id: 4, name: "RAV4 Mountain Escape", type: "SUV", fuel: "Petrol", rating: 4.9, price: 5500, hot: true, loc: "Bouddha", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80", pin: [68, 55], tags: ["Experience","Flexible"] },
+      { id: 5, name: "Creta Highway", type: "SUV", fuel: "Diesel", rating: 4.7, price: 4800, hot: false, loc: "Patan", img: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80", pin: [22, 70], tags: ["Inclusion","Flexible"] },
+      { id: 6, name: "Hiace Group Trek", type: "Van", fuel: "Diesel", rating: 4.5, price: 7500, hot: false, loc: "Kalanki", img: "https://images.unsplash.com/photo-1544620341-1adc1baa7bb9?w=600&q=80", pin: [75, 28], tags: ["Max 12","Flexible"] },
+      { id: 7, name: "MG ZS EV Quiet Ride", type: "SUV", fuel: "Electric", rating: 4.8, price: 6200, hot: true, loc: "Baluwatar", img: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80", pin: [48, 25], tags: ["Electric","Flexible"] },
+      { id: 8, name: "Alto Budget City", type: "Hatchback", fuel: "Petrol", rating: 4.2, price: 1400, hot: false, loc: "Baneshwor", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&q=80", pin: [35, 48], tags: ["Experience","Flexible"] },
+    ];
+    const params = new URLSearchParams(location.search);
+    let cur = "NPR", service = params.get("service") || "rent", view = params.get("view") || "map", priceMax = 15000, active = null;
+    const svcNames = { rent: "Rent a Car", driver: "Hire a Driver", self: "Self-Drive" };
+
+    function money(n) {
+      const v = n * RATES[cur];
+      return (cur === "NPR" || cur === "INR") ? SYMBOL[cur] + Math.round(v).toLocaleString() : SYMBOL[cur] + v.toFixed(0);
+    }
+
+    function filtered() {
+      const types = [...document.querySelectorAll('[data-f="type"]:checked')].map(i => i.value);
+      const fuels = [...document.querySelectorAll('[data-f="fuel"]:checked')].map(i => i.value);
+      let list = CARS.filter(c => types.includes(c.type) && fuels.includes(c.fuel) && c.price <= priceMax);
+      const sort = document.getElementById("sort").value;
+      if (sort === "price_asc") list.sort((a,b) => a.price - b.price);
+      else if (sort === "price_desc") list.sort((a,b) => b.price - a.price);
+      else if (sort === "rating") list.sort((a,b) => b.rating - a.rating);
+      return list;
+    }
+
+    function card(c, compact) {
+      if (compact) {
+        return `<article class="compact ${active===c.id?"active":""}" data-id="${c.id}">
+          <img src="${c.img}" alt="" /><div><h4>${c.name}</h4><div class="meta">★ ${c.rating}</div><div class="p">${money(c.price)}/day</div></div></article>`;
+      }
+      return `<article class="card ${active===c.id?"active":""}" data-id="${c.id}">
+        <img src="${c.img}" alt="${c.name}" />
+        <div>
+          ${c.hot ? '<span class="badge">Hot Sale!</span>' : ""}
+          <h3>${c.name}</h3>
+          <div class="meta">${c.type} · ${c.fuel} · ★ ${c.rating} · ${c.loc}</div>
+          <div class="tags">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>
+        </div>
+        <div class="price-col">
+          <div class="price">${money(c.price)}<small>per day</small></div>
+          <a class="btn btn-navy" href="detail.html?id=${c.id}&service=${service}" onclick="event.stopPropagation()">Book Now</a>
+        </div>
+      </article>`;
+    }
+
+    function render() {
+      const cars = filtered();
+      document.getElementById("count").textContent = cars.length;
+      document.getElementById("svcLabel").textContent = svcNames[service];
+      document.getElementById("layout").className = "layout-" + view;
+      document.querySelectorAll(".svc").forEach(s => s.classList.toggle("active", s.dataset.service === service));
+      document.querySelectorAll(".view-toggle button").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+
+      const list = document.getElementById("list");
+      const mapList = document.getElementById("mapList");
+      const map = document.getElementById("map");
+      map.querySelectorAll(".pin").forEach(p => p.remove());
+
+      if (!cars.length) {
+        list.innerHTML = `<div class="empty">No vehicles match filters.</div>`;
+        mapList.innerHTML = "";
+        return;
+      }
+      list.innerHTML = cars.map(c => card(c, false)).join("");
+      mapList.innerHTML = cars.map(c => card(c, true)).join("");
+      cars.forEach(c => {
+        const pin = document.createElement("button");
+        pin.type = "button"; pin.className = "pin" + (active === c.id ? " active" : "");
+        pin.style.left = c.pin[0] + "%"; pin.style.top = c.pin[1] + "%";
+        pin.textContent = money(c.price);
+        pin.onclick = () => { active = c.id; render(); };
+        map.appendChild(pin);
+      });
+
+      document.querySelectorAll(".card, .compact").forEach(el => {
+        el.addEventListener("click", e => {
+          if (e.target.closest("a")) return;
+          if (el.classList.contains("compact")) { active = +el.dataset.id; render(); return; }
+          location.href = `detail.html?id=${el.dataset.id}&service=${service}`;
+        });
+        if (el.classList.contains("compact")) {
+          el.addEventListener("dblclick", () => location.href = `detail.html?id=${el.dataset.id}&service=${service}`);
+        }
+      });
+    }
+
+    document.querySelectorAll(".svc").forEach(s => s.addEventListener("click", () => { service = s.dataset.service; render(); }));
+    document.querySelectorAll(".view-toggle button").forEach(b => b.addEventListener("click", () => { view = b.dataset.view; render(); }));
+    document.getElementById("filters").addEventListener("change", render);
+    document.getElementById("sort").addEventListener("change", render);
+    document.getElementById("priceMax").addEventListener("input", e => {
+      priceMax = +e.target.value;
+      document.getElementById("priceLabel").textContent = priceMax >= 15000 ? "15k+" : money(priceMax);
+      render();
+    });
+    document.querySelectorAll("#currencyBar button").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#currencyBar button").forEach(x => x.classList.remove("active"));
+        b.classList.add("active"); cur = b.dataset.cur; render();
+      });
+    });
+
+    (function () {
+      if (params.get("loc")) document.getElementById("loc").value = params.get("loc");
+      const a = new Date(); a.setDate(a.getDate() + 1);
+      const b = new Date(a); b.setDate(b.getDate() + 3);
+      document.getElementById("pickup").value = a.toISOString().slice(0, 10);
+      document.getElementById("dropoff").value = b.toISOString().slice(0, 10);
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pathil Vehicle — Pathil Holidays theme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #12324d;
+      --navy-deep: #0b2236;
+      --gold: #c9a227;
+      --gold-soft: #f7efd6;
+      --teal: #1a6b6b;
+      --ink: #1c2a33;
+      --muted: #5c6b76;
+      --line: #e4e9ee;
+      --bg: #f7f5f1;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Nunito Sans", sans-serif; color: var(--ink); background: var(--bg); }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    .topbar {
+      background: var(--navy-deep); color: #c9d5e0; font-size: .8rem;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 28px; gap: 12px; flex-wrap: wrap;
+    }
+    .topbar a:hover { color: #fff; }
+    .currencies { display: flex; gap: 10px; align-items: center; }
+    .currencies button {
+      background: none; border: none; color: #c9d5e0; cursor: pointer; font-weight: 700; font-size: .78rem;
+    }
+    .currencies button.active { color: var(--gold); }
+
+    .nav {
+      background: var(--white); border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 28px; position: sticky; top: 0; z-index: 40;
+      box-shadow: 0 2px 12px rgba(18,50,77,.06);
+    }
+    .brand {
+      font-family: "Cormorant Garamond", serif; font-size: 1.75rem; font-weight: 700;
+      color: var(--navy); letter-spacing: .02em; line-height: 1;
+    }
+    .brand small {
+      display: block; font-family: "Nunito Sans", sans-serif; font-size: .65rem;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 700;
+    }
+    .menu { display: flex; gap: 22px; font-weight: 600; font-size: .9rem; color: var(--navy); }
+    .menu a:hover { color: var(--teal); }
+    .menu .drop { position: relative; }
+    .menu .drop:hover .sub { display: block; }
+    .sub {
+      display: none; position: absolute; top: 100%; left: 0; min-width: 180px;
+      background: #fff; border: 1px solid var(--line); border-radius: 8px;
+      padding: 8px 0; box-shadow: 0 12px 30px rgba(0,0,0,.1); z-index: 5;
+    }
+    .sub a { display: block; padding: 8px 14px; font-size: .85rem; font-weight: 500; }
+    .sub a:hover { background: var(--gold-soft); }
+
+    /* HERO — Pathil "book your travel" vibe */
+    .hero {
+      position: relative; min-height: 520px;
+      background:
+        linear-gradient(120deg, rgba(11,34,54,.82) 0%, rgba(26,107,107,.55) 55%, rgba(11,34,54,.4) 100%),
+        url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1600&q=80') center/cover;
+      color: #fff; display: flex; align-items: center; padding: 60px 28px 100px;
+    }
+    .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
+    .hero .eyebrow {
+      font-size: .75rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold); font-weight: 800; margin-bottom: 10px;
+    }
+    .hero h1 {
+      font-family: "Cormorant Garamond", serif; font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 700; line-height: 1; max-width: 12ch; margin-bottom: 12px;
+    }
+    .hero p { max-width: 420px; opacity: .9; margin-bottom: 28px; font-size: 1.05rem; }
+
+    .book-box {
+      background: rgba(255,255,255,.97); color: var(--ink); border-radius: 6px;
+      padding: 18px; display: grid; grid-template-columns: 1.3fr 1fr 1fr .9fr auto;
+      gap: 10px; align-items: end; box-shadow: 0 24px 50px rgba(0,0,0,.25);
+    }
+    .book-box label {
+      display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+      font-weight: 800; color: var(--muted); margin-bottom: 4px;
+    }
+    .book-box input, .book-box select {
+      width: 100%; border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; background: #fff;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: none; border-radius: 4px; padding: 12px 22px; font-weight: 800;
+      cursor: pointer; text-transform: uppercase; letter-spacing: .06em; font-size: .82rem;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy-deep); }
+    .btn-gold:hover { background: #d4ad2f; }
+    .btn-navy { background: var(--navy); color: #fff; }
+    .btn-navy:hover { background: var(--navy-deep); }
+    .btn-outline { background: transparent; border: 1px solid var(--line); color: var(--navy); }
+
+    /* SERVICE after hero */
+    .service-wrap {
+      max-width: 1100px; margin: -48px auto 0; padding: 0 28px; position: relative; z-index: 5;
+    }
+    .service-panel {
+      background: #fff; border-radius: 8px; padding: 22px 24px;
+      box-shadow: 0 16px 40px rgba(18,50,77,.12); border-top: 3px solid var(--gold);
+    }
+    .service-panel h2 {
+      font-family: "Cormorant Garamond", serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 16px;
+    }
+    .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .service-card {
+      position: relative; border: 2px solid transparent; border-radius: 8px;
+      padding: 16px; text-align: center; cursor: pointer; background: #f9fafb;
+      transition: .2s;
+    }
+    .service-card.active { border-color: #1a8f4a; background: #fff; }
+    .service-card .check {
+      position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+      border-radius: 50%; background: #1a8f4a; color: #fff; font-size: .7rem;
+      display: none; align-items: center; justify-content: center;
+    }
+    .service-card.active .check { display: flex; }
+    .service-card strong { display: block; margin-top: 8px; color: var(--navy); }
+
+    .section { max-width: 1100px; margin: 48px auto; padding: 0 28px; }
+    .section-head { text-align: center; margin-bottom: 28px; }
+    .section-head .label {
+      color: var(--gold); font-size: .75rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+    }
+    .section-head h2 {
+      font-family: "Cormorant Garamond", serif; font-size: clamp(1.8rem, 3vw, 2.4rem);
+      color: var(--navy); margin: 6px 0 8px;
+    }
+    .section-head p { color: var(--muted); max-width: 520px; margin: 0 auto; }
+
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .filters-inline { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      border: 1px solid var(--line); background: #fff; border-radius: 999px;
+      padding: 7px 14px; font-size: .82rem; font-weight: 700; cursor: pointer; color: var(--navy);
+    }
+    .pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    .pkg-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+    }
+    .pkg {
+      background: #fff; border-radius: 6px; overflow: hidden;
+      box-shadow: 0 8px 24px rgba(18,50,77,.08); position: relative;
+      display: flex; flex-direction: column; transition: transform .2s;
+      cursor: pointer;
+    }
+    .pkg:hover { transform: translateY(-4px); }
+    .pkg-img { height: 170px; position: relative; overflow: hidden; }
+    .pkg-img img { width: 100%; height: 100%; object-fit: cover; }
+    .badge {
+      position: absolute; top: 12px; left: 12px; background: #e11d48; color: #fff;
+      font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+      padding: 5px 8px; border-radius: 3px;
+    }
+    .pkg-body { padding: 14px 14px 16px; flex: 1; display: flex; flex-direction: column; }
+    .pkg-body h3 { font-size: 1.05rem; color: var(--navy); margin-bottom: 4px; }
+    .pkg-meta { font-size: .8rem; color: var(--muted); margin-bottom: 10px; }
+    .pkg-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .pkg-tags span {
+      font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      border: 1px solid var(--line); padding: 3px 7px; border-radius: 3px; color: var(--muted);
+    }
+    .pkg-foot {
+      margin-top: auto; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--line); padding-top: 12px;
+    }
+    .pkg-price { font-weight: 800; color: var(--teal); font-size: 1.05rem; }
+    .pkg-price small { display: block; font-weight: 600; color: var(--muted); font-size: .7rem; }
+
+    .dest-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .dest {
+      position: relative; height: 180px; border-radius: 6px; overflow: hidden;
+      color: #fff; display: flex; align-items: flex-end; padding: 16px;
+      background-size: cover; background-position: center;
+    }
+    .dest::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(11,34,54,.85));
+    }
+    .dest > * { position: relative; }
+    .dest h3 { font-family: "Cormorant Garamond", serif; font-size: 1.5rem; }
+    .dest span { font-size: .8rem; opacity: .85; }
+
+    .contact {
+      background: var(--navy); color: #d5dee8; padding: 48px 28px; margin-top: 56px;
+    }
+    .contact-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px;
+    }
+    .contact h2 {
+      font-family: "Cormorant Garamond", serif; font-size: 2rem; color: #fff; margin-bottom: 10px;
+    }
+    .contact a { color: var(--gold); }
+    .contact form { display: flex; flex-direction: column; gap: 10px; }
+    .contact input, .contact textarea {
+      border: 1px solid #2a4a66; background: var(--navy-deep); color: #fff;
+      border-radius: 4px; padding: 10px 12px;
+    }
+    .contact textarea { min-height: 90px; resize: vertical; }
+    .foot-note {
+      text-align: center; padding: 16px; font-size: .8rem; color: var(--muted); background: #efece6;
+    }
+
+    @media (max-width: 1000px) {
+      .book-box { grid-template-columns: 1fr 1fr; }
+      .book-box .btn { grid-column: 1 / -1; }
+      .pkg-grid, .dest-grid { grid-template-columns: 1fr 1fr; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .menu { display: none; }
+      .service-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .pkg-grid, .dest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div>Subidhanagar-32, Tinkune, Kathmandu · 9851126531 · info@pathilholidays.com</div>
+    <div class="currencies" id="currencyBar">
+      <button type="button" class="active" data-cur="NPR">NPR</button>
+      <button type="button" data-cur="USD">USD</button>
+      <button type="button" data-cur="EUR">EUR</button>
+      <button type="button" data-cur="INR">INR</button>
+      <button type="button" data-cur="AUD">AUD</button>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a class="brand" href="index.html">Pathil<small>Vehicle</small></a>
+    <div class="menu">
+      <a href="index.html">Home</a>
+      <div class="drop">
+        <a href="listing.html">Fleet ▾</a>
+        <div class="sub">
+          <a href="listing.html?type=Hatchback">Hatchback</a>
+          <a href="listing.html?type=Sedan">Sedan</a>
+          <a href="listing.html?type=SUV">SUV</a>
+          <a href="listing.html?type=Van">Van</a>
+        </div>
+      </div>
+      <a href="https://pathilholidays.com/home" target="_blank" rel="noopener">Tours</a>
+      <a href="listing.html">Cab</a>
+      <div class="drop">
+        <a href="#contact">More ▾</a>
+        <div class="sub">
+          <a href="#contact">About / Contact</a>
+          <a href="../index.html">All templates</a>
+          <a href="../template-a/index.html">Kayak-style template</a>
+        </div>
+      </div>
+    </div>
+    <a class="btn btn-navy" href="listing.html">Book a cab</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Pathil Holidays · Vehicle desk</div>
+      <h1>Pathil Vehicle</h1>
+      <p>Book your travel on four wheels — airport transfers, valley days, and long-haul Nepal / India road journeys.</p>
+      <form class="book-box" id="bookForm" action="listing.html" method="get">
+        <div>
+          <label>Destination</label>
+          <input type="text" name="loc" id="dest" value="Kathmandu, Nepal" />
+        </div>
+        <div>
+          <label>Date</label>
+          <input type="date" name="pickup" id="date" />
+        </div>
+        <div>
+          <label>Guests</label>
+          <select id="guests" name="guests">
+            <option>1–2</option><option selected>3–4</option><option>5–7</option><option>8+</option>
+          </select>
+        </div>
+        <div>
+          <label>Trip type</label>
+          <select id="tripType" name="trip">
+            <option>City</option><option>Airport</option><option>Outstation</option>
+          </select>
+        </div>
+        <input type="hidden" name="service" id="serviceInput" value="rent" />
+        <input type="hidden" name="view" value="map" />
+        <button class="btn btn-gold" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="service-wrap">
+    <div class="service-panel">
+      <h2>Choose a service</h2>
+      <div class="service-grid">
+        <button type="button" class="service-card active" data-service="rent">
+          <span class="check">✓</span>
+          <svg width="80" height="56" viewBox="0 0 88 64" fill="none"><rect x="8" y="28" width="72" height="22" rx="8" fill="#1a8f4a"/><path d="M18 28l8-14h36l8 14" fill="#2db35e"/><circle cx="26" cy="50" r="7" fill="#12324d"/><circle cx="62" cy="50" r="7" fill="#12324d"/></svg>
+          <strong>Rent a Car</strong>
+        </button>
+        <button type="button" class="service-card" data-service="driver">
+          <span class="check">✓</span>
+          <svg width="80" height="56" viewBox="0 0 88 64" fill="none"><rect x="6" y="30" width="58" height="18" rx="7" fill="#1a8f4a"/><path d="M14 30l6-11h28l6 11" fill="#2db35e"/><circle cx="72" cy="40" r="7" fill="#1a8f4a"/><rect x="69" y="47" width="6" height="10" rx="2" fill="#147a3d"/></svg>
+          <strong>Hire a Driver</strong>
+        </button>
+        <button type="button" class="service-card" data-service="self">
+          <span class="check">✓</span>
+          <svg width="80" height="56" viewBox="0 0 88 64" fill="none"><path d="M22 42h44l-4-16H26l-4 16z" fill="#1a8f4a"/><path d="M28 26h32l4 10H24l4-10z" fill="#2db35e"/><circle cx="30" cy="44" r="6" fill="#12324d"/><circle cx="58" cy="44" r="6" fill="#12324d"/></svg>
+          <strong>Self-Drive</strong>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="fleet">
+    <div class="section-head">
+      <div class="label">Featured fleet</div>
+      <h2>Our most popular vehicles</h2>
+      <p>A quick taste — open the listing page for full filters, map, and all cars.</p>
+    </div>
+
+    <div class="pkg-grid" id="pkgGrid"></div>
+    <p style="text-align:center;margin-top:28px">
+      <a class="btn btn-gold" href="listing.html?view=map">Open listing page →</a>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="label">Exploring</div>
+      <h2>Finest tourist corridors</h2>
+      <p>Browse corridors and pick a route — vehicles ready for Nepal and beyond.</p>
+    </div>
+    <div class="dest-grid">
+      <a class="dest" style="background-image:url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=600&q=80')" href="listing.html?loc=Nepal"><div><h3>Nepal</h3><span>17 vehicle routes</span></div></a>
+      <a class="dest" style="background-image:url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80')" href="listing.html?loc=India"><div><h3>India</h3><span>9 cross-border</span></div></a>
+      <a class="dest" style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80')" href="listing.html?loc=Bhutan"><div><h3>Bhutan</h3><span>7 packages</span></div></a>
+      <a class="dest" style="background-image:url('https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80')" href="listing.html?loc=Tibet"><div><h3>Tibet</h3><span>6 packages</span></div></a>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div>
+        <div class="label" style="color:var(--gold)">Contact</div>
+        <h2>Get in touch</h2>
+        <p>Questions about a cab, driver, or self-drive plan? Our Pathil team will get back to you.</p>
+        <p style="margin-top:16px">
+          Pathil Holidays<br />
+          Subidhanagar-32, Tinkune, Kathmandu<br />
+          9851126531<br />
+          <a href="mailto:info@pathilholidays.com">info@pathilholidays.com</a>
+        </p>
+      </div>
+      <div>
+        <h3 style="color:#fff;margin-bottom:10px">Useful links</h3>
+        <ul>
+          <li><a href="https://pathilholidays.com/home" target="_blank" rel="noopener">Tours home</a></li>
+                  <li><a href="listing.html">Vehicle listing</a></li>
+          <li><a href="detail.html">Vehicle detail demo</a></li>
+          <li><a href="../template-a/index.html">Kayak-style listing</a></li>
+        </ul>
+      </div>
+      <form onsubmit="event.preventDefault(); alert('Message sent (demo). Pathil Vehicle will reply soon.'); this.reset();">
+        <input type="text" placeholder="Your name" required />
+        <input type="email" placeholder="Email" required />
+        <textarea placeholder="How can we help?" required></textarea>
+        <button class="btn btn-gold" type="submit">Send your message</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="foot-note">copyright © 2026 pathil holidays · Pathil Vehicle template B</div>
+
+  <script>
+    const RATES = { NPR: 1, USD: 0.0075, EUR: 0.0069, INR: 0.62, AUD: 0.011 };
+    const SYMBOL = { NPR: "NPR ", USD: "$", EUR: "€", INR: "₹", AUD: "A$" };
+
+    const CARS = [
+      { id: 1, name: "Hyundai i20 City Hop", type: "Hatchback", days: "Day hire", price: 2250, hot: true, img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=700&q=80", tags: ["Experience","Inclusion","Flexible"] },
+      { id: 2, name: "Corolla Airport Run", type: "Sedan", days: "Transfer", price: 3200, hot: false, img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=700&q=80", tags: ["Experience","Inclusion","Flexible"] },
+      { id: 4, name: "RAV4 Mountain Escape", type: "SUV", days: "2–3 Days", price: 5500, hot: true, img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=700&q=80", tags: ["Experience","Inclusion","Flexible"] },
+      { id: 6, name: "Hiace Group Trek", type: "Van", days: "Multi-day", price: 7500, hot: false, img: "https://images.unsplash.com/photo-1544620341-1adc1baa7bb9?w=700&q=80", tags: ["Experience","Inclusion","Max 12"] },
+    ];
+
+    let cur = "NPR";
+    let service = "rent";
+
+    function money(npr) {
+      const v = npr * RATES[cur];
+      if (cur === "NPR" || cur === "INR") return SYMBOL[cur] + Math.round(v).toLocaleString();
+      return SYMBOL[cur] + v.toFixed(0);
+    }
+
+    function render() {
+      document.getElementById("pkgGrid").innerHTML = CARS.map(c => `
+        <article class="pkg" data-id="${c.id}">
+          <div class="pkg-img">
+            ${c.hot ? '<span class="badge">Hot Sale!</span>' : ""}
+            <img src="${c.img}" alt="${c.name}" />
+          </div>
+          <div class="pkg-body">
+            <h3>${c.name}</h3>
+            <div class="pkg-meta">Nepal · ${c.days} · ${c.type}</div>
+            <div class="pkg-tags">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>
+            <div class="pkg-foot">
+              <div class="pkg-price">${money(c.price)}<small>per day</small></div>
+              <a class="btn btn-navy" href="listing.html?service=${service}&view=map" onclick="event.stopPropagation()">See listing</a>
+            </div>
+          </div>
+        </article>`).join("");
+
+      document.querySelectorAll(".pkg").forEach(el => {
+        el.addEventListener("click", () => {
+          location.href = `listing.html?service=${service}&view=map`;
+        });
+      });
+    }
+
+    document.querySelectorAll(".service-card").forEach(card => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".service-card").forEach(c => c.classList.remove("active"));
+        card.classList.add("active");
+        service = card.dataset.service;
+        const si = document.getElementById("serviceInput");
+        if (si) si.value = service;
+        render();
+      });
+    });
+
+    document.querySelectorAll("#currencyBar button").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#currencyBar button").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        cur = b.dataset.cur;
+        render();
+      });
+    });
+
+    (function () {
+      const d = document.getElementById("date");
+      const t = new Date(); t.setDate(t.getDate() + 1);
+      d.value = t.toISOString().slice(0, 10);
+    })();
+
+    render();
+  </script>
+</body>
+</html>

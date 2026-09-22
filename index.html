@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pathil Vehicle — Design Templates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0b1f17;
+      --green: #1a8f4a;
+      --green-deep: #0f6b36;
+      --sand: #e8f2ec;
+      --mist: #f4f7f5;
+      --line: #d5e0d9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Outfit, sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, #c8e8d4 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 90% 10%, #d4ebe0 0%, transparent 50%),
+        linear-gradient(180deg, #f7fbf8 0%, #eef5f0 100%);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
+    header { margin-bottom: 48px; }
+    .brand {
+      font-family: Syne, sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .brand span { color: var(--green); }
+    .lede {
+      margin-top: 14px;
+      max-width: 520px;
+      font-size: 1.1rem;
+      color: #3a5246;
+      line-height: 1.55;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 12px 40px rgba(11, 31, 23, 0.06);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(11, 31, 23, 0.12);
+    }
+    .preview {
+      height: 200px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .preview::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(11,31,23,.55));
+    }
+    .preview .tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 1;
+      background: rgba(255,255,255,.95);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .body { padding: 22px 24px 26px; flex: 1; display: flex; flex-direction: column; }
+    .body h2 {
+      font-family: Syne, sans-serif;
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+    .body p {
+      color: #4a6356;
+      font-size: .95rem;
+      line-height: 1.5;
+      flex: 1;
+    }
+    .links {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .9rem;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-primary:hover { background: var(--green-deep); }
+    .btn-ghost { background: var(--sand); color: var(--ink); }
+    .btn-ghost:hover { background: #d7ebe0; }
+    footer {
+      margin-top: 40px;
+      font-size: .85rem;
+      color: #5a7264;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">Pathil <span>Vehicle</span></div>
+      <p class="lede">Three fully interactive HTML templates — pick a visual direction and open the home page to begin.</p>
+    </header>
+
+    <div class="grid">
+      <article class="card">
+        <div class="preview" style="background-image:url('https://images.unsplash.com/photo-1494905998402-395d579af36f?w=900&q=80')">
+          <span class="tag">Template A · Kayak style</span>
+        </div>
+        <div class="body">
+          <h2>Road & Rank — Vehicle first</h2>
+          <p>Hero + Choose a service, then a dedicated Kayak-style listing (filters + map + sort), and gallery booking detail.</p>
+          <div class="links">
+            <a class="btn btn-primary" href="template-a/index.html">Open template</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="preview" style="background-image:url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=900&q=80')">
+          <span class="tag">Template B · Pathil Holidays</span>
+        </div>
+        <div class="body">
+          <h2>Pathil Holidays theme</h2>
+          <p>Same booking flow, styled like <a href="https://pathilholidays.com/home" target="_blank" rel="noopener" style="color:var(--green)">pathilholidays.com</a> — package cards, destination strips, currency bar, and travel-agency layout for vehicles.</p>
+          <div class="links">
+            <a class="btn btn-primary" href="template-b/index.html">Open template</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="preview" style="background-image:url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=900&q=80')">
+          <span class="tag">Template C · Pathil Vehicles</span>
+        </div>
+        <div class="body">
+          <h2>Move freely through Nepal</h2>
+          <p>A bold vehicle-first home page with service-aware booking, real car imagery, interactive map/list/grid results, and vehicle detail booking.</p>
+          <div class="links">
+            <a class="btn btn-primary" href="template-c/index.html">Open template</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <footer>Pathil Vehicle · interactive HTML mockups · Kathmandu</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cars in Kathmandu — Pathil Vehicle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #1a8f4a; --green-hover: #147a3d; --green-soft: #e8f6ee;
+      --ink: #0d1f16; --muted: #5a6b62; --line: #e2e8e4; --bg: #eef1f0;
+      --navy: #1a2b3c; --radius: 10px; --shadow: 0 6px 20px rgba(13,31,22,.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Outfit, sans-serif; color: var(--ink); background: var(--bg); }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 20px; background: #fff; border-bottom: 1px solid var(--line);
+    }
+    .logo { font-family: Syne, sans-serif; font-weight: 800; font-size: 1.15rem; }
+    .logo em { font-style: normal; color: var(--green); }
+    .nav-links { display: flex; gap: 18px; font-size: .88rem; font-weight: 500; color: var(--muted); }
+    .nav-links a:hover { color: var(--ink); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; cursor: pointer;
+    }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { background: var(--green-hover); }
+    .btn-outline { background: #fff; border: 1px solid var(--line); }
+
+    /* Kayak-style sticky search strip */
+    .search-strip {
+      position: sticky; top: 0; z-index: 40;
+      background: #fff; border-bottom: 1px solid var(--line);
+      padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,.04);
+    }
+    .search-bar {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr auto auto;
+      gap: 8px; align-items: end;
+    }
+    .field label {
+      display: block; font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--muted); margin-bottom: 3px;
+    }
+    .field input, .field select {
+      width: 100%; border: 1px solid var(--line); border-radius: 8px;
+      padding: 9px 12px; background: #fafbfa;
+    }
+    .field input:focus, .field select:focus { outline: 2px solid var(--green-soft); border-color: var(--green); }
+
+    .service-strip {
+      max-width: 1280px; margin: 0 auto; padding: 12px 20px 0;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .service-strip > span { font-size: .85rem; font-weight: 700; color: var(--navy); margin-right: 4px; }
+    .svc-chip {
+      border: 2px solid transparent; background: #fff; border-radius: 10px;
+      padding: 8px 14px; font-weight: 700; font-size: .85rem; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px; color: var(--navy);
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .svc-chip.active { border-color: var(--green); background: #fff; }
+    .svc-chip .dot {
+      width: 18px; height: 18px; border-radius: 50%; background: var(--green);
+      color: #fff; font-size: .65rem; display: none; align-items: center; justify-content: center;
+    }
+    .svc-chip.active .dot { display: flex; }
+
+    .shell {
+      max-width: 1280px; margin: 14px auto 40px; padding: 0 20px;
+      display: grid; grid-template-columns: 240px 1fr; gap: 14px;
+    }
+
+    .filters {
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 14px; height: fit-content; position: sticky; top: 78px;
+      max-height: calc(100vh - 100px); overflow: auto;
+    }
+    .filters h3 {
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .05em;
+      color: var(--muted); margin: 14px 0 8px; font-weight: 700;
+    }
+    .filters h3:first-child { margin-top: 0; }
+    .check-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 7px;
+      font-size: .88rem; cursor: pointer;
+    }
+    .check-row input { accent-color: var(--green); width: 15px; height: 15px; }
+    .price-range { width: 100%; accent-color: var(--green); }
+    .price-labels { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); margin-top: 4px; }
+    .seat-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .seat-pill {
+      border: 1px solid var(--line); background: #fff; border-radius: 7px;
+      padding: 6px 10px; font-size: .8rem; font-weight: 600; cursor: pointer;
+    }
+    .seat-pill.active { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+
+    .results-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .results-head h1 { font-size: 1.05rem; font-weight: 700; }
+    .results-head h1 strong { color: var(--green); }
+    .head-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .sort {
+      border: 1px solid var(--line); background: #fff; border-radius: 8px;
+      padding: 8px 10px; font-size: .85rem; font-weight: 600;
+    }
+    .view-toggle {
+      display: flex; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+    }
+    .view-toggle button {
+      border: none; background: transparent; padding: 8px 12px; cursor: pointer;
+      font-weight: 600; font-size: .8rem; color: var(--muted);
+    }
+    .view-toggle button.active { background: var(--green); color: #fff; }
+
+    /* Default Kayak map+list */
+    .layout-map .list-only { display: none; }
+    .layout-list .map-split, .layout-grid .map-split { display: none; }
+    .layout-map .map-split {
+      display: grid; grid-template-columns: 1.05fr .95fr; gap: 12px; min-height: calc(100vh - 160px);
+    }
+    .map-pane {
+      position: relative; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden;
+      background:
+        linear-gradient(rgba(255,255,255,.35), rgba(255,255,255,.35)),
+        url('https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&q=70') center/cover;
+      min-height: 480px;
+    }
+    .map-check {
+      position: absolute; top: 10px; left: 10px; z-index: 2;
+      background: #fff; padding: 7px 11px; border-radius: 8px; font-size: .78rem; font-weight: 600;
+      box-shadow: var(--shadow); display: flex; align-items: center; gap: 6px;
+    }
+    .pin {
+      position: absolute; transform: translate(-50%, -100%);
+      background: #fff; border: 2px solid var(--green); border-radius: 999px;
+      padding: 5px 9px; font-size: .75rem; font-weight: 700; white-space: nowrap;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+    .pin:hover, .pin.active { background: var(--green); color: #fff; }
+
+    .map-list, .results-list { display: flex; flex-direction: column; gap: 10px; }
+    .map-list { overflow: auto; max-height: calc(100vh - 160px); padding-right: 2px; }
+
+    .car-card {
+      display: grid; grid-template-columns: 200px 1fr auto; gap: 14px;
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 12px; cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    }
+    .car-card:hover, .car-card.active { border-color: #b8dcc6; box-shadow: var(--shadow); }
+    .car-img {
+      border-radius: 8px; overflow: hidden; background: #eef2f0;
+      aspect-ratio: 16/10; position: relative;
+    }
+    .car-img img { width: 100%; height: 100%; object-fit: cover; }
+    .fav {
+      position: absolute; top: 6px; right: 6px; width: 32px; height: 32px;
+      border-radius: 50%; border: none; background: rgba(255,255,255,.95);
+      cursor: pointer; color: #999; font-size: .95rem;
+    }
+    .fav.on { color: #e11d48; }
+    .car-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 3px; }
+    .car-meta { color: var(--muted); font-size: .84rem; margin-bottom: 8px; }
+    .spec-row { display: flex; flex-wrap: wrap; gap: 10px; font-size: .82rem; color: var(--muted); margin-bottom: 6px; }
+    .loc { font-size: .8rem; color: var(--muted); }
+    .car-price {
+      text-align: right; display: flex; flex-direction: column; align-items: flex-end;
+      justify-content: space-between; min-width: 130px;
+    }
+    .rating { font-size: .82rem; font-weight: 600; }
+    .rating .stars { color: #f5a623; }
+    .day-price { font-size: 1.2rem; font-weight: 800; }
+    .day-price small { font-size: .72rem; font-weight: 500; color: var(--muted); }
+    .total { font-size: .75rem; color: var(--muted); margin: 3px 0 10px; }
+
+    .compact-card {
+      display: grid; grid-template-columns: 96px 1fr; gap: 10px;
+      background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 9px; cursor: pointer;
+    }
+    .compact-card.active { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-soft); }
+    .compact-card img { width: 100%; height: 68px; object-fit: cover; border-radius: 6px; }
+    .compact-card h4 { font-size: .92rem; }
+    .compact-card .meta { font-size: .75rem; color: var(--muted); }
+    .compact-card .price { font-weight: 800; margin-top: 4px; color: var(--green); font-size: .9rem; }
+
+    .layout-grid .list-only {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .layout-grid .car-card { grid-template-columns: 1fr; padding: 0; overflow: hidden; }
+    .layout-grid .car-img { border-radius: 10px 10px 0 0; }
+    .layout-grid .car-info, .layout-grid .car-price { padding: 10px 12px; text-align: left; align-items: flex-start; }
+    .layout-grid .car-price {
+      flex-direction: row; justify-content: space-between; align-items: center;
+      padding-top: 0; padding-bottom: 12px;
+    }
+
+    .empty {
+      background: #fff; border: 1px dashed var(--line); border-radius: var(--radius);
+      padding: 40px; text-align: center; color: var(--muted);
+    }
+    .crumb { font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+    .crumb a:hover { color: var(--green); }
+
+    @media (max-width: 1000px) {
+      .shell { grid-template-columns: 1fr; }
+      .filters { position: static; max-height: none; }
+      .search-bar { grid-template-columns: 1fr 1fr; }
+      .layout-map .map-split { grid-template-columns: 1fr; min-height: auto; }
+      .map-list { max-height: 420px; }
+      .layout-grid .list-only { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 640px) {
+      .car-card { grid-template-columns: 1fr; }
+      .car-price { flex-direction: row; align-items: center; text-align: left; }
+      .layout-grid .list-only { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="logo" href="index.html">Pathil <em>Vehicle</em></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="listing.html">Listing</a>
+      <a href="detail.html">Detail</a>
+      <a href="../index.html">Templates</a>
+    </div>
+    <button class="btn btn-outline" type="button">Sign in</button>
+  </nav>
+
+  <div class="search-strip">
+    <form class="search-bar" id="searchForm" onsubmit="return refreshSearch(event)">
+      <div class="field">
+        <label>Pick-up location</label>
+        <input type="text" id="loc" value="Kathmandu, Nepal" />
+      </div>
+      <div class="field">
+        <label>Pick-up</label>
+        <input type="datetime-local" id="pickup" />
+      </div>
+      <div class="field">
+        <label>Drop-off</label>
+        <input type="datetime-local" id="dropoff" />
+      </div>
+      <div class="field">
+        <label>Sort</label>
+        <select id="sortSelect" class="sort" style="width:100%">
+          <option value="rank">Recommended</option>
+          <option value="price_asc">Price: low to high</option>
+          <option value="price_desc">Price: high to low</option>
+          <option value="rating">Top rated</option>
+        </select>
+      </div>
+      <button class="btn btn-green" type="submit">Search</button>
+    </form>
+  </div>
+
+  <div class="service-strip">
+    <span>Choose a service</span>
+    <button type="button" class="svc-chip active" data-service="rent"><span class="dot">✓</span> Rent a Car</button>
+    <button type="button" class="svc-chip" data-service="driver"><span class="dot">✓</span> Hire a Driver</button>
+    <button type="button" class="svc-chip" data-service="self"><span class="dot">✓</span> Self-Drive</button>
+  </div>
+
+  <div class="shell">
+    <aside class="filters" id="filters">
+      <h3>Vehicle type</h3>
+      <label class="check-row"><input type="checkbox" data-filter="type" value="Hatchback" checked /> Hatchback</label>
+      <label class="check-row"><input type="checkbox" data-filter="type" value="Sedan" checked /> Sedan</label>
+      <label class="check-row"><input type="checkbox" data-filter="type" value="SUV" checked /> SUV</label>
+      <label class="check-row"><input type="checkbox" data-filter="type" value="Van" checked /> Van</label>
+
+      <h3>Price per day</h3>
+      <input class="price-range" type="range" id="priceMax" min="1000" max="15000" step="500" value="15000" />
+      <div class="price-labels"><span>NPR 1,000</span><span id="priceLabel">NPR 15,000+</span></div>
+
+      <h3>Transmission</h3>
+      <label class="check-row"><input type="checkbox" data-filter="trans" value="Automatic" checked /> Automatic</label>
+      <label class="check-row"><input type="checkbox" data-filter="trans" value="Manual" checked /> Manual</label>
+
+      <h3>Fuel type</h3>
+      <label class="check-row"><input type="checkbox" data-filter="fuel" value="Petrol" checked /> Petrol</label>
+      <label class="check-row"><input type="checkbox" data-filter="fuel" value="Diesel" checked /> Diesel</label>
+      <label class="check-row"><input type="checkbox" data-filter="fuel" value="Electric" checked /> Electric</label>
+
+      <h3>Seats</h3>
+      <div class="seat-pills" id="seatPills">
+        <button type="button" class="seat-pill active" data-seat="all">All</button>
+        <button type="button" class="seat-pill" data-seat="2-4">2–4</button>
+        <button type="button" class="seat-pill" data-seat="5">5</button>
+        <button type="button" class="seat-pill" data-seat="6-7">6–7</button>
+        <button type="button" class="seat-pill" data-seat="8+">8+</button>
+      </div>
+
+      <h3>Supplier / spot</h3>
+      <label class="check-row"><input type="checkbox" checked /> Free cancellation</label>
+      <label class="check-row"><input type="checkbox" checked /> Airport pickup</label>
+      <label class="check-row"><input type="checkbox" /> Instant confirm</label>
+    </aside>
+
+    <section>
+      <div class="crumb"><a href="index.html">Home</a> · Cars · <span id="locCrumb">Kathmandu, Nepal</span></div>
+      <div class="results-head">
+        <h1><strong id="countLabel">8</strong> cars · <span id="serviceLabel">Rent a Car</span> · <span id="dateLabel">Kathmandu</span></h1>
+        <div class="head-actions">
+          <div class="view-toggle" role="group" aria-label="View">
+            <button type="button" class="active" data-view="map">Map</button>
+            <button type="button" data-view="list">List</button>
+            <button type="button" data-view="grid">Grid</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="layoutRoot" class="layout-map">
+        <div class="list-only results-list" id="carList"></div>
+        <div class="map-split">
+          <div class="map-pane" id="mapPane">
+            <label class="map-check"><input type="checkbox" id="searchMap" /> Search as I move the map</label>
+          </div>
+          <div class="map-list" id="mapList"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const CARS = [
+      { id: 1, name: "Hyundai i20", type: "Hatchback", trans: "Automatic", fuel: "Petrol", seats: 5, bags: 2, rating: 4.6, price: 2250, loc: "Thamel · 0.8 km", img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=80", pin: [28, 42] },
+      { id: 2, name: "Toyota Corolla", type: "Sedan", trans: "Automatic", fuel: "Petrol", seats: 5, bags: 3, rating: 4.8, price: 3200, loc: "Airport Rd · 3.2 km", img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80", pin: [55, 38] },
+      { id: 3, name: "Suzuki Swift", type: "Hatchback", trans: "Manual", fuel: "Petrol", seats: 5, bags: 2, rating: 4.4, price: 1800, loc: "Lazimpat · 1.5 km", img: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600&q=80", pin: [40, 62] },
+      { id: 4, name: "Toyota RAV4", type: "SUV", trans: "Automatic", fuel: "Petrol", seats: 5, bags: 4, rating: 4.9, price: 5500, loc: "Bouddha · 4.1 km", img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80", pin: [68, 55] },
+      { id: 5, name: "Hyundai Creta", type: "SUV", trans: "Automatic", fuel: "Diesel", seats: 5, bags: 3, rating: 4.7, price: 4800, loc: "Patan · 5.0 km", img: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80", pin: [22, 70] },
+      { id: 6, name: "Toyota Hiace", type: "Van", trans: "Manual", fuel: "Diesel", seats: 12, bags: 8, rating: 4.5, price: 7500, loc: "Kalanki · 6.2 km", img: "https://images.unsplash.com/photo-1544620341-1adc1baa7bb9?w=600&q=80", pin: [75, 28] },
+      { id: 7, name: "MG ZS EV", type: "SUV", trans: "Automatic", fuel: "Electric", seats: 5, bags: 3, rating: 4.8, price: 6200, loc: "Baluwatar · 2.0 km", img: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80", pin: [48, 25] },
+      { id: 8, name: "Maruti Alto", type: "Hatchback", trans: "Manual", fuel: "Petrol", seats: 4, bags: 1, rating: 4.2, price: 1400, loc: "Baneshwor · 2.8 km", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&q=80", pin: [35, 48] },
+    ];
+
+    const SERVICE_NAMES = { rent: "Rent a Car", driver: "Hire a Driver", self: "Self-Drive" };
+    const params = new URLSearchParams(location.search);
+
+    let state = {
+      service: params.get("service") || "rent",
+      view: params.get("view") || "map",
+      seat: "all",
+      priceMax: 15000,
+      sort: "rank",
+      favs: new Set(),
+      activePin: null,
+    };
+
+    const fmt = n => "NPR " + n.toLocaleString("en-NP");
+
+    function seatMatch(seats, key) {
+      if (key === "all") return true;
+      if (key === "2-4") return seats >= 2 && seats <= 4;
+      if (key === "5") return seats === 5;
+      if (key === "6-7") return seats >= 6 && seats <= 7;
+      if (key === "8+") return seats >= 8;
+      return true;
+    }
+
+    function getFilters() {
+      return {
+        types: [...document.querySelectorAll('[data-filter="type"]:checked')].map(i => i.value),
+        trans: [...document.querySelectorAll('[data-filter="trans"]:checked')].map(i => i.value),
+        fuel: [...document.querySelectorAll('[data-filter="fuel"]:checked')].map(i => i.value),
+      };
+    }
+
+    function filtered() {
+      const f = getFilters();
+      let list = CARS.filter(c =>
+        f.types.includes(c.type) && f.trans.includes(c.trans) && f.fuel.includes(c.fuel) &&
+        c.price <= state.priceMax && seatMatch(c.seats, state.seat)
+      );
+      if (state.sort === "price_asc") list.sort((a, b) => a.price - b.price);
+      else if (state.sort === "price_desc") list.sort((a, b) => b.price - a.price);
+      else if (state.sort === "rating") list.sort((a, b) => b.rating - a.rating);
+      else list.sort((a, b) => b.rating * 1000 - a.price - (a.rating * 1000 - b.price));
+      return list;
+    }
+
+    function cardHTML(c, compact) {
+      const favOn = state.favs.has(c.id) ? " on" : "";
+      if (compact) {
+        return `<article class="compact-card ${state.activePin === c.id ? "active" : ""}" data-id="${c.id}">
+          <img src="${c.img}" alt="${c.name}" />
+          <div>
+            <h4>${c.name}</h4>
+            <div class="meta">★ ${c.rating} · ${c.type}</div>
+            <div class="price">${fmt(c.price)}/day</div>
+          </div>
+        </article>`;
+      }
+      return `<article class="car-card ${state.activePin === c.id ? "active" : ""}" data-id="${c.id}">
+        <div class="car-img">
+          <img src="${c.img}" alt="${c.name}" />
+          <button type="button" class="fav${favOn}" data-fav="${c.id}" aria-label="Favorite">♥</button>
+        </div>
+        <div class="car-info">
+          <h3>${c.name}</h3>
+          <div class="car-meta">${c.type} · ${c.trans} · ${c.fuel}</div>
+          <div class="spec-row"><span>🧍 ${c.seats} Seats</span><span>🧳 ${c.bags} Bags</span><span>❄ AC</span></div>
+          <div class="loc">📍 ${c.loc}</div>
+        </div>
+        <div class="car-price">
+          <div class="rating"><span class="stars">★</span> ${c.rating}</div>
+          <div>
+            <div class="day-price">${fmt(c.price)} <small>/ day</small></div>
+            <div class="total">${fmt(c.price * 3)} est. total</div>
+            <a class="btn btn-green" href="detail.html?id=${c.id}&service=${state.service}" onclick="event.stopPropagation()">View Details</a>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderPins(cars) {
+      const pane = document.getElementById("mapPane");
+      pane.querySelectorAll(".pin").forEach(p => p.remove());
+      cars.forEach(c => {
+        const pin = document.createElement("button");
+        pin.type = "button";
+        pin.className = "pin" + (state.activePin === c.id ? " active" : "");
+        pin.style.left = c.pin[0] + "%";
+        pin.style.top = c.pin[1] + "%";
+        pin.textContent = fmt(c.price);
+        pin.addEventListener("click", () => { state.activePin = c.id; render(); });
+        pane.appendChild(pin);
+      });
+    }
+
+    function bindCards(root, compact) {
+      root.querySelectorAll(compact ? ".compact-card" : ".car-card").forEach(el => {
+        el.addEventListener("click", e => {
+          if (e.target.closest("[data-fav]")) return;
+          if (compact && e.detail === 1) { state.activePin = +el.dataset.id; render(); return; }
+          location.href = `detail.html?id=${el.dataset.id}&service=${state.service}`;
+        });
+        if (compact) {
+          el.addEventListener("dblclick", () => {
+            location.href = `detail.html?id=${el.dataset.id}&service=${state.service}`;
+          });
+        }
+      });
+      root.querySelectorAll("[data-fav]").forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.stopPropagation();
+          const id = +btn.dataset.fav;
+          if (state.favs.has(id)) state.favs.delete(id); else state.favs.add(id);
+          render();
+        });
+      });
+    }
+
+    function render() {
+      const cars = filtered();
+      document.getElementById("countLabel").textContent = cars.length;
+      document.getElementById("serviceLabel").textContent = SERVICE_NAMES[state.service];
+      document.getElementById("locCrumb").textContent = document.getElementById("loc").value;
+      document.getElementById("dateLabel").textContent = document.getElementById("loc").value.split(",")[0];
+      document.getElementById("layoutRoot").className = "layout-" + state.view;
+
+      document.querySelectorAll(".svc-chip").forEach(c => {
+        c.classList.toggle("active", c.dataset.service === state.service);
+      });
+      document.querySelectorAll(".view-toggle button").forEach(b => {
+        b.classList.toggle("active", b.dataset.view === state.view);
+      });
+
+      const list = document.getElementById("carList");
+      const mapList = document.getElementById("mapList");
+      if (!cars.length) {
+        list.innerHTML = `<div class="empty">No vehicles match your filters.</div>`;
+        mapList.innerHTML = "";
+        renderPins([]);
+        return;
+      }
+      list.innerHTML = cars.map(c => cardHTML(c, false)).join("");
+      mapList.innerHTML = cars.map(c => cardHTML(c, true)).join("");
+      renderPins(cars);
+      bindCards(list, false);
+      bindCards(mapList, true);
+    }
+
+    document.querySelectorAll(".svc-chip").forEach(card => {
+      card.addEventListener("click", () => { state.service = card.dataset.service; render(); });
+    });
+    document.querySelectorAll(".view-toggle button").forEach(btn => {
+      btn.addEventListener("click", () => { state.view = btn.dataset.view; render(); });
+    });
+    document.getElementById("filters").addEventListener("change", render);
+    document.getElementById("priceMax").addEventListener("input", e => {
+      state.priceMax = +e.target.value;
+      document.getElementById("priceLabel").textContent =
+        state.priceMax >= 15000 ? "NPR 15,000+" : fmt(state.priceMax);
+      render();
+    });
+    document.querySelectorAll("#seatPills .seat-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#seatPills .seat-pill").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.seat = btn.dataset.seat;
+        render();
+      });
+    });
+    document.getElementById("sortSelect").addEventListener("change", e => {
+      state.sort = e.target.value;
+      render();
+    });
+
+    function refreshSearch(e) {
+      e.preventDefault();
+      render();
+      return false;
+    }
+
+    (function init() {
+      if (params.get("loc")) document.getElementById("loc").value = params.get("loc");
+      const start = new Date(); start.setDate(start.getDate() + 1); start.setMinutes(0);
+      const end = new Date(start); end.setDate(end.getDate() + 3);
+      const toLocal = dt => {
+        const pad = n => String(n).padStart(2, "0");
+        return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+      };
+      document.getElementById("pickup").value = params.get("pickup") || toLocal(start);
+      document.getElementById("dropoff").value = params.get("dropoff") || toLocal(end);
+      if (params.get("sort")) {
+        state.sort = params.get("sort");
+        document.getElementById("sortSelect").value = state.sort;
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
