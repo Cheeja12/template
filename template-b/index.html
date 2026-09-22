@@ -9,15 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy: #12324d;
-      --navy-deep: #0b2236;
-      --gold: #c9a227;
-      --gold-soft: #f7efd6;
-      --teal: #1a6b6b;
-      --ink: #1c2a33;
-      --muted: #5c6b76;
-      --line: #e4e9ee;
-      --bg: #f7f5f1;
+      --navy: #073467;
+      --navy-deep: #06254b;
+      --gold: #ffc928;
+      --gold-soft: #fff3bb;
+      --teal: #1063a5;
+      --ink: #0d2947;
+      --muted: #62758a;
+      --line: #dce6ef;
+      --bg: #f5f8fb;
       --white: #fff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,50 +27,28 @@
     img { max-width: 100%; display: block; }
     ul { list-style: none; }
 
-    .topbar {
-      background: var(--navy-deep); color: #c9d5e0; font-size: .8rem;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 28px; gap: 12px; flex-wrap: wrap;
-    }
-    .topbar a:hover { color: #fff; }
-    .currencies { display: flex; gap: 10px; align-items: center; }
-    .currencies button {
-      background: none; border: none; color: #c9d5e0; cursor: pointer; font-weight: 700; font-size: .78rem;
-    }
-    .currencies button.active { color: var(--gold); }
-
     .nav {
-      background: var(--white); border-bottom: 1px solid var(--line);
+      background: rgba(6,37,75,.9); color: #fff; border-bottom: 1px solid rgba(255,255,255,.12);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 28px; position: sticky; top: 0; z-index: 40;
-      box-shadow: 0 2px 12px rgba(18,50,77,.06);
+      padding: 14px max(22px, calc((100% - 1180px) / 2)); position: absolute; top: 0; right: 0; left: 0; z-index: 40;
     }
     .brand {
       font-family: "Cormorant Garamond", serif; font-size: 1.75rem; font-weight: 700;
-      color: var(--navy); letter-spacing: .02em; line-height: 1;
+      color: #fff; letter-spacing: -.06em; line-height: 1;
     }
     .brand small {
       display: block; font-family: "Nunito Sans", sans-serif; font-size: .65rem;
-      letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.65); font-weight: 700;
     }
-    .menu { display: flex; gap: 22px; font-weight: 600; font-size: .9rem; color: var(--navy); }
-    .menu a:hover { color: var(--teal); }
-    .menu .drop { position: relative; }
-    .menu .drop:hover .sub { display: block; }
-    .sub {
-      display: none; position: absolute; top: 100%; left: 0; min-width: 180px;
-      background: #fff; border: 1px solid var(--line); border-radius: 8px;
-      padding: 8px 0; box-shadow: 0 12px 30px rgba(0,0,0,.1); z-index: 5;
-    }
-    .sub a { display: block; padding: 8px 14px; font-size: .85rem; font-weight: 500; }
-    .sub a:hover { background: var(--gold-soft); }
+    .menu { display: flex; gap: 26px; font-weight: 700; font-size: .78rem; color: rgba(255,255,255,.86); }
+    .menu a:hover { color: var(--gold); }
 
     /* HERO — Pathil "book your travel" vibe */
     .hero {
       position: relative; min-height: 520px;
       background:
-        linear-gradient(120deg, rgba(11,34,54,.82) 0%, rgba(26,107,107,.55) 55%, rgba(11,34,54,.4) 100%),
-        url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1600&q=80') center/cover;
+        linear-gradient(120deg, rgba(6,37,75,.9) 0%, rgba(7,74,134,.62) 55%, rgba(16,99,165,.4) 100%),
+        url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1600&q=85') center/cover;
       color: #fff; display: flex; align-items: center; padding: 60px 28px 100px;
     }
     .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
@@ -86,7 +64,7 @@
 
     .book-box {
       background: rgba(255,255,255,.97); color: var(--ink); border-radius: 6px;
-      padding: 18px; display: grid; grid-template-columns: 1.3fr 1fr 1fr .9fr auto;
+      padding: 18px; display: grid; grid-template-columns: 1.2fr 1.2fr 1fr 1fr 1fr auto;
       gap: 10px; align-items: end; box-shadow: 0 24px 50px rgba(0,0,0,.25);
     }
     .book-box label {
@@ -105,33 +83,16 @@
     .btn-gold:hover { background: #d4ad2f; }
     .btn-navy { background: var(--navy); color: #fff; }
     .btn-navy:hover { background: var(--navy-deep); }
-    .btn-outline { background: transparent; border: 1px solid var(--line); color: var(--navy); }
+    .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; }
 
-    /* SERVICE after hero */
-    .service-wrap {
-      max-width: 1100px; margin: -48px auto 0; padding: 0 28px; position: relative; z-index: 5;
-    }
-    .service-panel {
-      background: #fff; border-radius: 8px; padding: 22px 24px;
-      box-shadow: 0 16px 40px rgba(18,50,77,.12); border-top: 3px solid var(--gold);
-    }
-    .service-panel h2 {
-      font-family: "Cormorant Garamond", serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 16px;
-    }
-    .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .service-card {
-      position: relative; border: 2px solid transparent; border-radius: 8px;
-      padding: 16px; text-align: center; cursor: pointer; background: #f9fafb;
-      transition: .2s;
-    }
-    .service-card.active { border-color: #1a8f4a; background: #fff; }
-    .service-card .check {
-      position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
-      border-radius: 50%; background: #1a8f4a; color: #fff; font-size: .7rem;
-      display: none; align-items: center; justify-content: center;
-    }
-    .service-card.active .check { display: flex; }
-    .service-card strong { display: block; margin-top: 8px; color: var(--navy); }
+    .service-strip { display: flex; gap: 9px; margin: 24px 0 10px; }
+    .service-card { position: relative; min-width: 132px; padding: 10px 15px; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; color: rgba(255,255,255,.86); background: rgba(255,255,255,.08); cursor: pointer; }
+    .service-card strong { font-size: .8rem; }
+    .service-card.active { border-color: var(--gold); color: var(--navy-deep); background: var(--gold); }
+    .service-card .check { display: none; position: absolute; top: -5px; right: -4px; width: 17px; height: 17px; place-items: center; border-radius: 50%; color: var(--navy-deep); background: #fff; font-size: .65rem; }
+    .service-card.active .check { display: grid; }
+    #vehicleField { display: none; }
+    #vehicleField.visible { display: block; }
 
     .section { max-width: 1100px; margin: 48px auto; padding: 0 28px; }
     .section-head { text-align: center; margin-bottom: 28px; }
@@ -187,6 +148,12 @@
     .pkg-price { font-weight: 800; color: var(--teal); font-size: 1.05rem; }
     .pkg-price small { display: block; font-weight: 600; color: var(--muted); font-size: .7rem; }
 
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .why-card { padding: 24px; border: 1px solid var(--line); border-top: 3px solid var(--gold); border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(7,52,103,.06); }
+    .why-icon { display: grid; width: 42px; height: 42px; place-items: center; margin-bottom: 16px; border-radius: 10px; color: var(--navy-deep); background: var(--gold); font-size: 20px; font-weight: 900; }
+    .why-card h3 { margin-bottom: 8px; color: var(--navy); font-size: 1.05rem; }
+    .why-card p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
     .dest-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .dest {
       position: relative; height: 180px; border-radius: 6px; overflow: hidden;
@@ -226,9 +193,10 @@
       .book-box { grid-template-columns: 1fr 1fr; }
       .book-box .btn { grid-column: 1 / -1; }
       .pkg-grid, .dest-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
       .contact-inner { grid-template-columns: 1fr; }
       .menu { display: none; }
-      .service-grid { grid-template-columns: 1fr; }
+      .service-strip { flex-wrap: wrap; }
     }
     @media (max-width: 560px) {
       .pkg-grid, .dest-grid { grid-template-columns: 1fr; }
@@ -236,42 +204,15 @@
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div>Subidhanagar-32, Tinkune, Kathmandu · 9851126531 · info@pathilholidays.com</div>
-    <div class="currencies" id="currencyBar">
-      <button type="button" class="active" data-cur="NPR">NPR</button>
-      <button type="button" data-cur="USD">USD</button>
-      <button type="button" data-cur="EUR">EUR</button>
-      <button type="button" data-cur="INR">INR</button>
-      <button type="button" data-cur="AUD">AUD</button>
-    </div>
-  </div>
-
   <nav class="nav">
     <a class="brand" href="index.html">Pathil<small>Vehicle</small></a>
     <div class="menu">
       <a href="index.html">Home</a>
-      <div class="drop">
-        <a href="listing.html">Fleet ▾</a>
-        <div class="sub">
-          <a href="listing.html?type=Hatchback">Hatchback</a>
-          <a href="listing.html?type=Sedan">Sedan</a>
-          <a href="listing.html?type=SUV">SUV</a>
-          <a href="listing.html?type=Van">Van</a>
-        </div>
-      </div>
-      <a href="https://pathilholidays.com/home" target="_blank" rel="noopener">Tours</a>
-      <a href="listing.html">Cab</a>
-      <div class="drop">
-        <a href="#contact">More ▾</a>
-        <div class="sub">
-          <a href="#contact">About / Contact</a>
-          <a href="../index.html">All templates</a>
-          <a href="../template-a/index.html">Kayak-style template</a>
-        </div>
-      </div>
+      <a href="#fleet">Our fleet</a>
+      <a href="#why-pathil">Why Pathil</a>
+      <a href="#contact">Contact</a>
     </div>
-    <a class="btn btn-navy" href="listing.html">Book a cab</a>
+    <div style="display:flex;align-items:center;gap:10px"><a class="btn btn-outline" href="#contact">Sign in</a><a class="btn btn-gold" href="#booking">Find a vehicle →</a></div>
   </nav>
 
   <section class="hero">
@@ -279,56 +220,23 @@
       <div class="eyebrow">Pathil Holidays · Vehicle desk</div>
       <h1>Pathil Vehicle</h1>
       <p>Book your travel on four wheels — airport transfers, valley days, and long-haul Nepal / India road journeys.</p>
-      <form class="book-box" id="bookForm" action="listing.html" method="get">
-        <div>
-          <label>Destination</label>
-          <input type="text" name="loc" id="dest" value="Kathmandu, Nepal" />
-        </div>
-        <div>
-          <label>Date</label>
-          <input type="date" name="pickup" id="date" />
-        </div>
-        <div>
-          <label>Guests</label>
-          <select id="guests" name="guests">
-            <option>1–2</option><option selected>3–4</option><option>5–7</option><option>8+</option>
-          </select>
-        </div>
-        <div>
-          <label>Trip type</label>
-          <select id="tripType" name="trip">
-            <option>City</option><option>Airport</option><option>Outstation</option>
-          </select>
-        </div>
+      <div class="service-strip" role="tablist" aria-label="Choose a service">
+        <button type="button" class="service-card active" data-service="rent"><span class="check">✓</span><strong>Rent a Car</strong></button>
+        <button type="button" class="service-card" data-service="driver"><span class="check">✓</span><strong>Hire a Driver</strong></button>
+        <button type="button" class="service-card" data-service="self"><span class="check">✓</span><strong>Self-Drive</strong></button>
+      </div>
+      <form class="book-box" id="booking" action="listing.html" method="get">
+        <div><label id="startLabel">Pick-up location</label><input type="text" name="loc" id="dest" value="Kathmandu, Nepal" /></div>
+        <div><label id="endLabel">Drop-off location</label><input type="text" name="dropoff" id="dropoff" value="Kathmandu, Nepal" /></div>
+        <div><label id="startDateLabel">Pick-up</label><input type="datetime-local" name="pickup" id="date" /></div>
+        <div><label id="endDateLabel">Drop-off</label><input type="datetime-local" name="dropoffDate" id="dropoffDate" /></div>
+        <div id="vehicleField"><label>Vehicle type</label><select name="vehicle" id="vehicleType"><option>Select a vehicle</option><option>Economy car</option><option>SUV</option><option>Premium car</option><option>Van</option></select></div>
         <input type="hidden" name="service" id="serviceInput" value="rent" />
         <input type="hidden" name="view" value="map" />
-        <button class="btn btn-gold" type="submit">Search</button>
+        <button class="btn btn-gold" id="searchButton" type="submit">Find vehicles →</button>
       </form>
     </div>
   </section>
-
-  <div class="service-wrap">
-    <div class="service-panel">
-      <h2>Choose a service</h2>
-      <div class="service-grid">
-        <button type="button" class="service-card active" data-service="rent">
-          <span class="check">✓</span>
-          <svg width="80" height="56" viewBox="0 0 88 64" fill="none"><rect x="8" y="28" width="72" height="22" rx="8" fill="#1a8f4a"/><path d="M18 28l8-14h36l8 14" fill="#2db35e"/><circle cx="26" cy="50" r="7" fill="#12324d"/><circle cx="62" cy="50" r="7" fill="#12324d"/></svg>
-          <strong>Rent a Car</strong>
-        </button>
-        <button type="button" class="service-card" data-service="driver">
-          <span class="check">✓</span>
-          <svg width="80" height="56" viewBox="0 0 88 64" fill="none"><rect x="6" y="30" width="58" height="18" rx="7" fill="#1a8f4a"/><path d="M14 30l6-11h28l6 11" fill="#2db35e"/><circle cx="72" cy="40" r="7" fill="#1a8f4a"/><rect x="69" y="47" width="6" height="10" rx="2" fill="#147a3d"/></svg>
-          <strong>Hire a Driver</strong>
-        </button>
-        <button type="button" class="service-card" data-service="self">
-          <span class="check">✓</span>
-          <svg width="80" height="56" viewBox="0 0 88 64" fill="none"><path d="M22 42h44l-4-16H26l-4 16z" fill="#1a8f4a"/><path d="M28 26h32l4 10H24l4-10z" fill="#2db35e"/><circle cx="30" cy="44" r="6" fill="#12324d"/><circle cx="58" cy="44" r="6" fill="#12324d"/></svg>
-          <strong>Self-Drive</strong>
-        </button>
-      </div>
-    </div>
-  </div>
 
   <section class="section" id="fleet">
     <div class="section-head">
@@ -341,6 +249,19 @@
     <p style="text-align:center;margin-top:28px">
       <a class="btn btn-gold" href="listing.html?view=map">Open listing page →</a>
     </p>
+  </section>
+
+  <section class="section" id="why-pathil">
+    <div class="section-head">
+      <div class="label">The Pathil promise</div>
+      <h2>Travel with confidence</h2>
+      <p>Simple booking, dependable vehicles, and local support for every road across Nepal.</p>
+    </div>
+    <div class="why-grid">
+      <article class="why-card"><div class="why-icon">✓</div><h3>Verified vehicles</h3><p>Clean, road-ready cars with transparent pricing and clear pickup details.</p></article>
+      <article class="why-card"><div class="why-icon">↗</div><h3>Made for your route</h3><p>Choose a car, a driver, or self-drive service that fits your journey.</p></article>
+      <article class="why-card"><div class="why-icon">24</div><h3>Local support</h3><p>Our Kathmandu team is available before, during, and after your booking.</p></article>
+    </div>
   </section>
 
   <section class="section">
@@ -435,6 +356,22 @@
       });
     }
 
+    const SERVICE_CONFIG = {
+      rent: { start: "Pick-up location", end: "Drop-off location", startDate: "Pick-up", endDate: "Drop-off", button: "Find vehicles →", vehicle: false },
+      driver: { start: "From", end: "To", startDate: "From date", endDate: "To date", button: "Find driver →", vehicle: true },
+      self: { start: "From", end: "To", startDate: "From date", endDate: "To date", button: "Find vehicle →", vehicle: false }
+    };
+
+    function updateBooking(serviceName) {
+      const config = SERVICE_CONFIG[serviceName];
+      document.getElementById("startLabel").textContent = config.start;
+      document.getElementById("endLabel").textContent = config.end;
+      document.getElementById("startDateLabel").textContent = config.startDate;
+      document.getElementById("endDateLabel").textContent = config.endDate;
+      document.getElementById("vehicleField").classList.toggle("visible", config.vehicle);
+      document.getElementById("searchButton").textContent = config.button;
+    }
+
     document.querySelectorAll(".service-card").forEach(card => {
       card.addEventListener("click", () => {
         document.querySelectorAll(".service-card").forEach(c => c.classList.remove("active"));
@@ -442,6 +379,7 @@
         service = card.dataset.service;
         const si = document.getElementById("serviceInput");
         if (si) si.value = service;
+        updateBooking(service);
         render();
       });
     });
@@ -456,9 +394,12 @@
     });
 
     (function () {
-      const d = document.getElementById("date");
-      const t = new Date(); t.setDate(t.getDate() + 1);
-      d.value = t.toISOString().slice(0, 10);
+      const now = new Date();
+      const later = new Date(now.getTime() + 72 * 60 * 60 * 1000);
+      const local = date => new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById("date").value = local(now);
+      document.getElementById("dropoffDate").value = local(later);
+      updateBooking(service);
     })();
 
     render();

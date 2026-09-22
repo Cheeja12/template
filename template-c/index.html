@@ -310,6 +310,7 @@
     .view-toggle button.active { color: #fff; background: var(--blue-800); }
     .deal-alert { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 13px; border: 1px solid #bce8d5; border-radius: 9px; color: #18764f; background: #eefff7; font-size: 10px; font-weight: 700; }
     .deal-alert .icon { color: var(--green); }
+    .empty-results { padding: 42px 20px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); background: #fff; text-align: center; font-size: 13px; }
     .result-card { position: relative; display: grid; grid-template-columns: 155px minmax(0, 1fr) 104px; min-height: 177px; margin-bottom: 11px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 3px 9px rgba(7,52,103,.04); transition: transform .2s, box-shadow .2s; }
     .result-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
     .result-card-img { display: grid; min-height: 177px; place-items: center; padding: 12px; background: linear-gradient(135deg, #f0f8ff, #edf2f5); }
@@ -538,8 +539,8 @@
     <header class="results-nav"><div class="container nav-inner"><a href="#" class="brand"><span class="brand-mark">P</span><span>pathil<small>vehicles & journeys</small></span></a><nav class="nav-links"><a class="active" href="#">Search vehicles</a><a href="#" data-toast="Your saved trips will appear here.">Saved trips</a><a href="#" data-toast="Support is available 24/7.">Help</a></nav><div class="nav-actions"><a class="nav-login" href="#" data-toast="Sign in is ready for your booking account.">Sign in</a><button class="nav-mobile" aria-label="Open menu"><svg class="icon"><use href="#i-menu"/></svg></button></div></div></header>
     <div class="results-search-wrap"><form id="resultsSearch" class="container results-search"><div class="result-input"><svg class="icon"><use href="#i-pin"/></svg><div><label>Pick-up</label><input value="Kathmandu, Nepal" /></div></div><div class="result-input"><svg class="icon"><use href="#i-pin"/></svg><div><label>Drop-off</label><input value="Kathmandu, Nepal" /></div></div><div class="result-input"><svg class="icon"><use href="#i-calendar"/></svg><div><label>Pick-up</label><input value="18 Oct, 2026 · 1:00 PM" /></div></div><div class="result-input"><svg class="icon"><use href="#i-calendar"/></svg><div><label>Drop-off</label><input value="21 Oct, 2026 · 11:00 AM" /></div></div><button class="btn btn-primary" type="submit">Update search</button></form></div>
     <div class="results-main">
-      <aside class="filter-panel"><div class="filter-head"><b>Filter results</b><button class="clear-btn" id="clearFilters">Clear all</button></div><div class="filter-group"><div class="filter-title">Vehicle type <span>⌃</span></div><label class="check"><input type="checkbox" checked /> Economy <em>12</em></label><label class="check"><input type="checkbox" checked /> SUV <em>8</em></label><label class="check"><input type="checkbox" /> Luxury <em>4</em></label><label class="check"><input type="checkbox" /> Van / people carrier <em>5</em></label></div><div class="filter-group"><div class="filter-title">Transmission <span>⌃</span></div><label class="check"><input type="checkbox" checked /> Automatic <em>19</em></label><label class="check"><input type="checkbox" /> Manual <em>10</em></label></div><div class="filter-group"><div class="filter-title">Price per day <span>⌃</span></div><input class="range" type="range" min="20" max="150" value="100" /><div class="range-label"><span>$20</span><span>$100+</span></div></div><div class="filter-group"><div class="filter-title">Rental company <span>⌃</span></div><label class="check"><input type="checkbox" /> Pathil Select <em>14</em></label><label class="check"><input type="checkbox" /> Avis <em>9</em></label></div></aside>
-      <section class="results-column"><div class="mobile-filter"><button class="btn btn-ghost" id="mobileFilters">☷ &nbsp; Filters</button><div class="sort-box"><span>Sort by:</span><select><option>Our recommendation</option><option>Price: low to high</option><option>Rating</option></select></div></div><div class="results-heading"><div><h1>Cars in Kathmandu</h1><p>29 vehicles found · 18–21 Oct 2026 · 3 days</p></div><div style="display:flex;align-items:center;gap:10px"><div class="view-toggle" role="group" aria-label="Results view"><button type="button" class="active" data-view="map">Map</button><button type="button" data-view="list">List</button><button type="button" data-view="grid">Grid</button></div><div class="sort-box"><span>Sort by:</span><select><option>Our recommendation</option><option>Price: low to high</option><option>Rating</option></select></div></div></div><div class="deal-alert"><svg class="icon"><use href="#i-spark"/></svg><span>Book now. Prices are unlikely to drop before your rental.</span><span style="margin-left:auto">Price lock <span style="display:inline-block;width:27px;height:15px;margin-left:4px;vertical-align:-3px;border-radius:10px;background:var(--green);position:relative"><i style="position:absolute;right:2px;top:2px;width:11px;height:11px;border-radius:50%;background:#fff"></i></span></span></div><div id="resultList"></div></section>
+      <aside class="filter-panel"><div class="filter-head"><b>Filter results</b><button class="clear-btn" id="clearFilters">Clear all</button></div><div class="filter-group"><div class="filter-title">Vehicle type <span>⌃</span></div><label class="check"><input type="checkbox" data-filter="type" value="economy" checked /> Economy <em>2</em></label><label class="check"><input type="checkbox" data-filter="type" value="suv" checked /> SUV <em>1</em></label><label class="check"><input type="checkbox" data-filter="type" value="luxury" checked /> Luxury <em>1</em></label><label class="check"><input type="checkbox" data-filter="type" value="van" checked /> Van / people carrier <em>1</em></label></div><div class="filter-group"><div class="filter-title">Transmission <span>⌃</span></div><label class="check"><input type="checkbox" data-filter="transmission" value="automatic" checked /> Automatic <em>4</em></label><label class="check"><input type="checkbox" data-filter="transmission" value="manual" checked /> Manual <em>1</em></label></div><div class="filter-group"><div class="filter-title">Price per day <span>⌃</span></div><input class="range" id="priceMax" type="range" min="20" max="150" value="150" /><div class="range-label"><span>$20</span><span id="priceValue">$150+</span></div></div><div class="filter-group"><div class="filter-title">Rental company <span>⌃</span></div><label class="check"><input type="checkbox" data-filter="company" value="pathil" checked /> Pathil Select <em>4</em></label><label class="check"><input type="checkbox" data-filter="company" value="avis" checked /> Avis <em>1</em></label></div></aside>
+      <section class="results-column"><div class="mobile-filter"><button class="btn btn-ghost" id="mobileFilters">☷ &nbsp; Filters</button><div class="sort-box"><span>Sort by:</span><select id="mobileSort"><option value="recommended">Our recommendation</option><option value="price">Price: low to high</option><option value="rating">Rating</option></select></div></div><div class="results-heading"><div><h1>Cars in Kathmandu</h1><p id="resultsSummary">29 vehicles found · 18–21 Oct 2026 · 3 days</p></div><div style="display:flex;align-items:center;gap:10px"><div class="view-toggle" role="group" aria-label="Results view"><button type="button" class="active" data-view="map">Map</button><button type="button" data-view="list">List</button><button type="button" data-view="grid">Grid</button></div><div class="sort-box"><span>Sort by:</span><select id="desktopSort"><option value="recommended">Our recommendation</option><option value="price">Price: low to high</option><option value="rating">Rating</option></select></div></div></div><div class="deal-alert"><svg class="icon"><use href="#i-spark"/></svg><span>Book now. Prices are unlikely to drop before your rental.</span><span style="margin-left:auto">Price lock <span style="display:inline-block;width:27px;height:15px;margin-left:4px;vertical-align:-3px;border-radius:10px;background:var(--green);position:relative"><i style="position:absolute;right:2px;top:2px;width:11px;height:11px;border-radius:50%;background:#fff"></i></span></span></div><div id="resultList"></div></section>
       <aside class="map-panel" id="mapPanel"><span class="map-label kathmandu">Kathmandu</span><span class="map-label patan">Patan</span><span class="map-label bhaktapur">Bhaktapur</span><span class="map-label nagarkot">Nagarkot</span><div class="map-controls"><button type="button" data-map-zoom="in">+</button><button type="button" data-map-zoom="out">−</button></div><div class="map-tip"><span>Compare sites via Pathil</span><button class="btn btn-blue" type="button" id="mapViewButton">View map</button></div></aside>
     </div>
   </main>
@@ -570,11 +571,11 @@
     let toastTimer;
 
     const carData = [
-      { name: 'Pathil City Sedan', type: 'or similar compact', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=85', price: 60, cheaper: '29% cheaper', specs: ['5 seats', '3 bags', 'Automatic'], rating: '4.8', reviews: '84 reviews', location: 'Thamel Road, Kathmandu', pin: [35, 45] },
-      { name: 'Pathil Comfort', type: 'or similar touring car', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=85', price: 60, cheaper: '29% cheaper', specs: ['5 seats', '2 bags', 'Automatic'], rating: '4.7', reviews: '56 reviews', location: 'Trade Tower, Kathmandu', pin: [55, 58] },
-      { name: 'Pathil Grand Tourer', type: 'or similar premium', image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=700&q=85', price: 70, cheaper: '24% cheaper', specs: ['5 seats', '3 bags', 'Automatic'], rating: '4.9', reviews: '112 reviews', location: 'Tribhuvan Airport, Kathmandu', pin: [76, 36] },
-      { name: 'Pathil Explorer', type: 'or similar road trip', image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=700&q=85', price: 82, cheaper: '18% cheaper', specs: ['5 seats', '4 bags', 'Manual'], rating: '4.9', reviews: '38 reviews', location: 'Lakeside pickup, Pokhara', pin: [22, 28] },
-      { name: 'Pathil Group Van', type: 'or similar passenger van', image: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=700&q=85', price: 96, cheaper: '15% cheaper', specs: ['12 seats', '6 bags', 'Manual'], rating: '4.8', reviews: '23 reviews', location: 'Tinkune, Kathmandu', pin: [64, 78] }
+      { detailId: 1, name: 'Pathil City Sedan', category: 'economy', transmission: 'automatic', company: 'pathil', type: 'or similar compact', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=85', price: 60, cheaper: '29% cheaper', specs: ['5 seats', '3 bags', 'Automatic'], rating: '4.8', reviews: '84 reviews', location: 'Thamel Road, Kathmandu', pin: [35, 45] },
+      { detailId: 2, name: 'Pathil Comfort', category: 'economy', transmission: 'automatic', company: 'pathil', type: 'or similar touring car', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=85', price: 60, cheaper: '29% cheaper', specs: ['5 seats', '2 bags', 'Automatic'], rating: '4.7', reviews: '56 reviews', location: 'Trade Tower, Kathmandu', pin: [55, 58] },
+      { detailId: 4, name: 'Pathil Grand Tourer', category: 'luxury', transmission: 'automatic', company: 'avis', type: 'or similar premium', image: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=700&q=85', price: 70, cheaper: '24% cheaper', specs: ['5 seats', '3 bags', 'Automatic'], rating: '4.9', reviews: '112 reviews', location: 'Tribhuvan Airport, Kathmandu', pin: [76, 36] },
+      { detailId: 3, name: 'Pathil Explorer', category: 'suv', transmission: 'manual', company: 'pathil', type: 'or similar road trip', image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=700&q=85', price: 82, cheaper: '18% cheaper', specs: ['5 seats', '4 bags', 'Manual'], rating: '4.9', reviews: '38 reviews', location: 'Lakeside pickup, Pokhara', pin: [22, 28] },
+      { detailId: 5, name: 'Pathil Group Van', category: 'van', transmission: 'manual', company: 'pathil', type: 'or similar passenger van', image: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=700&q=85', price: 96, cheaper: '15% cheaper', specs: ['12 seats', '6 bags', 'Manual'], rating: '4.8', reviews: '23 reviews', location: 'Tinkune, Kathmandu', pin: [64, 78] }
     ];
 
     const icon = (id) => `<svg class="icon"><use href="#i-${id}"></use></svg>`;
@@ -621,9 +622,25 @@
       homeView.classList.remove('hide');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
+    function selectedValues(filter) {
+      return [...document.querySelectorAll(`[data-filter="${filter}"]:checked`)].map(input => input.value);
+    }
+    function filteredCars() {
+      const types = selectedValues('type');
+      const transmissions = selectedValues('transmission');
+      const companies = selectedValues('company');
+      const maxPrice = Number(document.querySelector('#priceMax').value);
+      const sort = document.querySelector('#desktopSort').value;
+      const cars = carData.filter(car => types.includes(car.category) && transmissions.includes(car.transmission) && companies.includes(car.company) && car.price <= maxPrice);
+      if (sort === 'price') cars.sort((a, b) => a.price - b.price);
+      if (sort === 'rating') cars.sort((a, b) => Number(b.rating) - Number(a.rating));
+      return cars;
+    }
     function renderResults() {
       const list = document.querySelector('#resultList');
-      list.innerHTML = carData.map((car, index) => `
+      const cars = filteredCars();
+      document.querySelector('#resultsSummary').textContent = `${cars.length} vehicles found · 18–21 Oct 2026 · 3 days`;
+      list.innerHTML = cars.length ? cars.map((car, index) => `
         <article class="result-card">
           <button class="heart" aria-label="Save ${car.name}" data-heart="${index}">${icon('heart')}</button>
           <div class="result-card-img"><img class="vehicle-photo" src="${car.image}" alt="Real ${car.name} rental vehicle" /></div>
@@ -634,16 +651,16 @@
             <div class="result-provider">${car.provider}</div>
             <div style="margin-top:5px;color:var(--muted);font-size:9px">${car.location}</div>
           </div>
-          <div class="result-price"><span class="cheaper">${car.cheaper}</span><div class="price-wrap"><div><strong>$${car.price}</strong><small> total · 3 days</small></div><a class="view-deal" href="detail.html?id=${index + 1}&service=${selectedService}" data-deal="${car.name}">View deal</a></div></div>
+          <div class="result-price"><span class="cheaper">${car.cheaper}</span><div class="price-wrap"><div><strong>$${car.price}</strong><small> total · 3 days</small></div><a class="view-deal" href="detail.html?id=${car.detailId}&service=${selectedService}" data-deal="${car.name}">View deal</a></div></div>
         </article>
-      `).join('');
+      `).join('') : '<div class="empty-results">No vehicles match these filters.</div>';
       list.querySelectorAll('[data-heart]').forEach(btn => btn.addEventListener('click', () => {
         btn.classList.toggle('liked');
         showToast(btn.classList.contains('liked') ? 'Saved to your Pathil trips.' : 'Removed from saved trips.');
       }));
       list.querySelectorAll('[data-deal]').forEach(btn => btn.addEventListener('click', () => {
         const index = [...list.querySelectorAll('[data-deal]')].indexOf(btn);
-        btn.href = `detail.html?id=${index + 1}&service=${selectedService}`;
+        btn.href = `detail.html?id=${cars[index].detailId}&service=${selectedService}`;
       }));
       list.querySelectorAll('[data-toast]').forEach(btn => btn.addEventListener('click', () => showToast(btn.dataset.toast)));
       renderMapPins();
@@ -652,7 +669,7 @@
     function renderMapPins() {
       const panel = document.querySelector('#mapPanel');
       panel.querySelectorAll('.dynamic-pin').forEach(pin => pin.remove());
-      carData.forEach((car, index) => {
+      filteredCars().forEach((car, index) => {
         const pin = document.createElement('button');
         pin.type = 'button';
         pin.className = 'map-pin dynamic-pin';
@@ -660,7 +677,7 @@
         pin.style.top = `${car.pin[1]}%`;
         pin.title = `Open ${car.name}`;
         pin.innerHTML = icon('car');
-        pin.addEventListener('click', () => { window.location.href = `detail.html?id=${index + 1}&service=${selectedService}`; });
+        pin.addEventListener('click', () => { window.location.href = `detail.html?id=${car.detailId}&service=${selectedService}`; });
         panel.appendChild(pin);
       });
     }
@@ -675,6 +692,15 @@
     }));
     document.querySelector('#search').addEventListener('submit', openResults);
     document.querySelector('#resultsSearch').addEventListener('submit', e => { e.preventDefault(); showToast('Search updated — showing the best matches first.'); });
+    document.querySelectorAll('[data-filter]').forEach(input => input.addEventListener('change', renderResults));
+    document.querySelector('#priceMax').addEventListener('input', event => {
+      document.querySelector('#priceValue').textContent = `$${event.target.value}${event.target.value === '150' ? '+' : ''}`;
+      renderResults();
+    });
+    document.querySelectorAll('#desktopSort, #mobileSort').forEach(select => select.addEventListener('change', event => {
+      document.querySelectorAll('#desktopSort, #mobileSort').forEach(other => { other.value = event.target.value; });
+      renderResults();
+    }));
     document.querySelectorAll('.view-toggle button').forEach(button => button.addEventListener('click', () => {
       resultsView.dataset.view = button.dataset.view;
       document.querySelectorAll('.view-toggle button').forEach(item => item.classList.toggle('active', item === button));
@@ -696,8 +722,11 @@
     document.querySelectorAll('[data-toast]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); showToast(btn.dataset.toast); }));
     document.querySelectorAll('.brand').forEach(brand => brand.addEventListener('click', openHome));
     document.querySelector('#clearFilters').addEventListener('click', () => {
-      document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(input => input.checked = false);
-      showToast('Filters cleared.');
+      document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(input => input.checked = true);
+      document.querySelector('#priceMax').value = 150;
+      document.querySelector('#priceValue').textContent = '$150+';
+      renderResults();
+      showToast('Filters cleared. Showing all vehicles.');
     });
     document.querySelector('#mobileFilters').addEventListener('click', () => showToast('On mobile, filters are ready to expand here.'));
     document.querySelector('#modalClose').addEventListener('click', () => modalBackdrop.classList.remove('open'));

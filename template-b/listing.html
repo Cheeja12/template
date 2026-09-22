@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy: #12324d; --navy-deep: #0b2236; --gold: #c9a227; --gold-soft: #f7efd6;
-      --teal: #1a6b6b; --ink: #1c2a33; --muted: #5c6b76; --line: #e4e9ee; --bg: #f7f5f1; --green: #1a8f4a;
+      --navy: #073467; --navy-deep: #06254b; --gold: #ffc928; --gold-soft: #fff3bb;
+      --teal: #1063a5; --ink: #0d2947; --muted: #62758a; --line: #dce6ef; --bg: #f5f8fb; --green: #16a56b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: "Nunito Sans", sans-serif; color: var(--ink); background: var(--bg); }
@@ -18,19 +18,11 @@
     button, input, select { font: inherit; }
     img { max-width: 100%; display: block; }
 
-    .topbar {
-      background: var(--navy-deep); color: #c9d5e0; font-size: .78rem;
-      padding: 7px 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-    }
-    .currencies button {
-      background: none; border: none; color: #c9d5e0; cursor: pointer; font-weight: 700; font-size: .75rem; margin-left: 8px;
-    }
-    .currencies button.active { color: var(--gold); }
-
     .nav {
       background: #fff; border-bottom: 1px solid var(--line);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 24px; position: sticky; top: 0; z-index: 50;
+      padding: 14px max(22px, calc((100% - 1180px) / 2)); position: sticky; top: 0; z-index: 50;
+      box-shadow: 0 2px 12px rgba(7,52,103,.06);
     }
     .brand {
       font-family: "Cormorant Garamond", serif; font-size: 1.6rem; font-weight: 700; color: var(--navy);
@@ -39,7 +31,8 @@
       display: block; font-family: "Nunito Sans", sans-serif; font-size: .6rem;
       letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 700;
     }
-    .menu { display: flex; gap: 18px; font-weight: 700; font-size: .88rem; color: var(--navy); }
+    .nav-links { display: flex; gap: 26px; font-weight: 700; font-size: .78rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--teal); }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       border: none; border-radius: 4px; padding: 10px 16px; font-weight: 800;
@@ -47,6 +40,7 @@
     }
     .btn-gold { background: var(--gold); color: var(--navy-deep); }
     .btn-navy { background: var(--navy); color: #fff; }
+    .btn-outline { background: #fff; border: 1px solid var(--line); color: var(--navy); }
 
     .search-strip {
       background: #fff; border-bottom: 1px solid var(--line); padding: 12px 24px;
@@ -185,7 +179,7 @@
       .search-bar { grid-template-columns: 1fr 1fr; }
       .layout-map .map-split { grid-template-columns: 1fr; }
       .layout-grid .list-only { grid-template-columns: 1fr 1fr; }
-      .menu { display: none; }
+      .nav-links { display: none; }
     }
     @media (max-width: 600px) {
       .card { grid-template-columns: 1fr; }
@@ -195,25 +189,15 @@
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <span>Subidhanagar-32, Tinkune · 9851126531</span>
-    <div class="currencies" id="currencyBar">
-      <button type="button" class="active" data-cur="NPR">NPR</button>
-      <button type="button" data-cur="USD">USD</button>
-      <button type="button" data-cur="EUR">EUR</button>
-      <button type="button" data-cur="INR">INR</button>
-    </div>
-  </div>
-
   <nav class="nav">
     <a class="brand" href="index.html">Pathil<small>Vehicle</small></a>
-    <div class="menu">
+    <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="listing.html">Listing</a>
-      <a href="detail.html">Detail</a>
-      <a href="../template-a/listing.html">Kayak listing</a>
+      <a href="listing.html">Our fleet</a>
+      <a href="listing.html">Why Pathil</a>
+      <a href="../index.html#contact">Contact</a>
     </div>
-    <a class="btn btn-navy" href="index.html">Back home</a>
+    <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-outline" type="button">Sign in</button><a class="btn btn-gold" href="index.html#booking">Find a vehicle →</a></div>
   </nav>
 
   <div class="search-strip">
@@ -221,15 +205,7 @@
       <div class="field"><label>Destination</label><input type="text" id="loc" value="Kathmandu, Nepal" /></div>
       <div class="field"><label>Pick-up</label><input type="date" id="pickup" /></div>
       <div class="field"><label>Drop-off</label><input type="date" id="dropoff" /></div>
-      <div class="field">
-        <label>Sort</label>
-        <select id="sort">
-          <option value="rank">Recommended</option>
-          <option value="price_asc">Price ↑</option>
-          <option value="price_desc">Price ↓</option>
-          <option value="rating">Top rated</option>
-        </select>
-      </div>
+      <div class="field"><label>Sort</label><select id="sort"><option value="rank">Recommended</option><option value="price_asc">Price ↑</option><option value="price_desc">Price ↓</option><option value="rating">Top rated</option></select></div>
       <button class="btn btn-gold" type="submit">Search</button>
     </form>
   </div>
