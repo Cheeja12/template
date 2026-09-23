@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --green: #1a8f4a; --green-hover: #147a3d; --green-soft: #e8f6ee;
-      --ink: #0d1f16; --muted: #5a6b62; --line: #e2e8e4; --bg: #eef1f0;
-      --navy: #1a2b3c; --radius: 10px; --shadow: 0 6px 20px rgba(13,31,22,.08);
+      --green: #1063a5; --green-hover: #073467; --green-soft: #eaf6ff;
+      --ink: #0d2947; --muted: #62758a; --line: #dce6ef; --bg: #f5f8fb;
+      --navy: #073467; --yellow: #ffc928; --radius: 10px; --shadow: 0 6px 20px rgba(7,52,103,.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Outfit, sans-serif; color: var(--ink); background: var(--bg); }
@@ -21,12 +21,12 @@
 
     .nav {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 20px; background: #fff; border-bottom: 1px solid var(--line);
+      padding: 14px max(22px, calc((100% - 1180px) / 2)); background: #fff; border-bottom: 1px solid var(--line);
     }
     .logo { font-family: Syne, sans-serif; font-weight: 800; font-size: 1.15rem; }
     .logo em { font-style: normal; color: var(--green); }
-    .nav-links { display: flex; gap: 18px; font-size: .88rem; font-weight: 500; color: var(--muted); }
-    .nav-links a:hover { color: var(--ink); }
+    .nav-links { display: flex; gap: 26px; font-size: .78rem; font-weight: 700; color: var(--muted); }
+    .nav-links a:hover { color: var(--green); }
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; cursor: pointer;
@@ -232,11 +232,11 @@
     <a class="logo" href="index.html">Pathil <em>Vehicle</em></a>
     <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="listing.html">Listing</a>
-      <a href="detail.html">Detail</a>
-      <a href="../index.html">Templates</a>
+      <a href="listing.html">Our fleet</a>
+      <a href="index.html#why-pathil">Why Pathil</a>
+      <a href="index.html#contact">Contact</a>
     </div>
-    <button class="btn btn-outline" type="button">Sign in</button>
+    <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-outline" type="button">Sign in</button><a class="btn btn-green" href="index.html#searchForm">Find a vehicle →</a></div>
   </nav>
 
   <div class="search-strip">

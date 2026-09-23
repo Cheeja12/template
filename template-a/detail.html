@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --green: #1a8f4a; --green-hover: #147a3d; --green-soft: #e8f6ee;
-      --ink: #0d1f16; --muted: #5a6b62; --line: #e2e8e4; --bg: #f5f7f6;
-      --navy: #1a2b3c; --radius: 12px; --shadow: 0 8px 28px rgba(13,31,22,.08);
+      --green: #1063a5; --green-hover: #073467; --green-soft: #eaf6ff;
+      --ink: #0d2947; --muted: #62758a; --line: #dce6ef; --bg: #f5f8fb;
+      --navy: #073467; --yellow: #ffc928; --radius: 12px; --shadow: 0 8px 28px rgba(7,52,103,.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Outfit, sans-serif; color: var(--ink); background: var(--bg); padding-bottom: 80px; }
@@ -27,6 +27,8 @@
     }
     .logo { font-family: Syne, sans-serif; font-weight: 800; font-size: 1.25rem; }
     .logo em { font-style: normal; color: var(--green); }
+    .nav-links { display: flex; gap: 26px; color: var(--muted); font-size: .78rem; font-weight: 700; }
+    .nav-links a:hover { color: var(--green); }
     .nav-right { display: flex; gap: 12px; align-items: center; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -223,16 +225,15 @@
       .gallery-grid, .stepper-grid { grid-template-columns: 1fr; }
       .book-card, .summary-side { position: static; }
       .reviews, .policy-grid, .amenity-list { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
     }
   </style>
 </head>
 <body data-layout="gallery">
   <nav class="nav">
     <a class="logo" href="index.html">Pathil <em>Vehicle</em></a>
-    <div class="nav-right">
-      <a class="btn btn-ghost" href="listing.html">← Back to listing</a>
-      <a class="btn btn-outline" href="../index.html">Templates</a>
-    </div>
+    <div class="nav-links"><a href="index.html">Home</a><a href="listing.html">Our fleet</a><a href="index.html#why-pathil">Why Pathil</a><a href="index.html#contact">Contact</a></div>
+    <div class="nav-right"><a class="btn btn-ghost" href="listing.html">Back to vehicles</a><a class="btn btn-green" href="index.html#searchForm">Find a vehicle →</a></div>
   </nav>
 
   <div class="layout-switch">
